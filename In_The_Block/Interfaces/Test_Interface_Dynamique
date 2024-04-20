@@ -1,0 +1,30 @@
+import tkinter as tk
+from tkinter import ttk
+
+def actualiser_contenu_onglet(event):
+    onglet_selectionne = event.widget.select()
+    onglet_index = notebook.index(onglet_selectionne)
+    frame = onglets[onglet_index]['frame']
+    # Ici, vous pouvez actualiser ou modifier le contenu de `frame` selon vos besoins
+    label = ttk.Label(frame, text=f"Contenu actualisé pour l'onglet {onglet_index + 1}")
+    label.pack()
+
+# Création de la fenêtre principale
+root = tk.Tk()
+root.title("Interface avec Onglets Actualisables")
+
+# Création du widget Notebook (onglets)
+notebook = ttk.Notebook(root)
+notebook.pack(expand=True, fill='both')
+
+# Création et ajout des onglets au notebook
+onglets = []
+for i in range(3):
+    frame = ttk.Frame(notebook)
+    notebook.add(frame, text=f'Onglet {i + 1}')
+    onglets.append({'frame': frame, 'index': i})
+
+# Ajout de l'événement pour actualiser le contenu de l'onglet
+notebook.bind("<<NotebookTabChanged>>", actualiser_contenu_onglet)
+
+root.mainloop()

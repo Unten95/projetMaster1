@@ -1,0 +1,16 @@
+#blockStart
+Block Number: 1;
+Transactions:;
+Tx1;
+Nonce: 31;
+Previous Block Hash: 
+Current Block Hash: 002f45cb65a834c67a69b4f604306e1dcac932276b9e94cdddb12af6fce16b6c
+#blockEnd
+#blockStart
+Block Number: 2;
+Transactions:;
+Tx2;
+Nonce: 89;
+Previous Block Hash: 002f45cb65a834c67a69b4f604306e1dcac932276b9e94cdddb12af6fce16b6c
+Current Block Hash: 00172c1c539fd39f403dd06c54c0005c8ec5ad06b9763f64f9629e5bc218564c
+#blockEnd

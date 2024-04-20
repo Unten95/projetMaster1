@@ -1,4 +1,5 @@
 import hashlib
+import os
 
 from BlockReader import read_blocks_from_file
 
@@ -39,16 +40,13 @@ def mine_block(block, difficulty):
         # Update the nonce in the block
         block['nonce'] = str(nonce)
 
-        # Print the block data for debugging
-        #print("Data used for hashing:", block)
-
         # Recalculate the block hash
         block['current block hash'] = calculate_block_hash(block)
 
     return block
 
 
-def write_block_to_file(block_data, file_path, difficulty):
+def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max_transactions=5):
     # Add previous block hash line
     if block_data['block number'] != 1:
         previous_block_data = read_blocks_from_file(file_path)[-1]
@@ -57,6 +55,12 @@ def write_block_to_file(block_data, file_path, difficulty):
     else:
         print("This is the first block. Using empty hash for previous block.")
         block_data['previous block hash'] = ''
+
+    # Get transactions from the memory pool
+    transactions = read_memory_pool(memory_pool_file, max_transactions)
+
+    # Add transactions to the block
+    block_data['transactions'] = transactions
 
     # Mine the block
     mined_block = mine_block(block_data, difficulty)
@@ -75,14 +79,38 @@ def write_block_to_file(block_data, file_path, difficulty):
 
         file.write("#blockEnd\n")
 
-"""
+    # Remove transactions from the memory pool
+    remove_transactions_from_memory_pool(memory_pool_file, mined_block['transactions'])
+
+
+def read_memory_pool(memory_pool_file, max_transactions):
+    transactions = []
+    if os.path.exists(memory_pool_file):
+        with open(memory_pool_file, 'r') as file:
+            transactions = file.readlines()
+    return [transaction.strip() for transaction in transactions[:max_transactions]]
+
+def remove_transactions_from_memory_pool(memory_pool_file, transactions):
+    if os.path.exists(memory_pool_file):
+        with open(memory_pool_file, 'r') as file:
+            lines = file.readlines()
+
+        with open(memory_pool_file, 'w') as file:
+            for line in lines:
+                if line.strip() not in transactions:
+                    file.write(line)
+
 # Define the difficulty (number of leading zeros required)
 difficulty = 5  # Adjust this value based on your requirements
 
+max_transactions=3
+
+# Memory pool file path
+memory_pool_file = 'MemPool.txt'
+"""
 # Example block data
 block_data1 = {
     'block number': 1,
-    'transactions': ['Tx1'],
     'nonce': '123456',  # Replace with actual nonce value
     'current block hash': '',  # Empty for now
     'previous block hash': ''  # Empty for the first block
@@ -90,13 +118,12 @@ block_data1 = {
 
 block_data2 = {
     'block number': 2,
-    'transactions': ['Tx2'],
     'nonce': '789012',  # Replace with actual nonce value
     'current block hash': '',  # Empty for now
     'previous block hash': ''  # Provide the hash of the previous block
 }
 
 # Write block data to file
-write_block_to_file(block_data1, 'blockchain.txt', difficulty)
-write_block_to_file(block_data2, 'blockchain.txt', difficulty)
+write_block_to_file(block_data1, 'blockchain.txt', difficulty, memory_pool_file, max_transactions)
+write_block_to_file(block_data2, 'blockchain.txt', difficulty, memory_pool_file, max_transactions)
 """

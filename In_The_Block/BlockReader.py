@@ -36,7 +36,7 @@ def read_blocks_from_file(file_path):
             elif line.startswith('Block Number:'):
                 block_number = line.split(': ')[1].rstrip(';\n')
                 current_block['block number'] = block_number
-            elif line.startswith('Tx'):
+            elif line.startswith('Expediteur'):
                 # Récupérer les transactions en séparant par ';'
                 # Retirer les éléments vides résultants
                 current_block['transactions'].append(line.rstrip(';\n'))

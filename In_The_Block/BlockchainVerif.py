@@ -4,9 +4,9 @@ from BlockReader import read_blocks_from_file
 def is_valid_block(block, previous_block):
     # Calculate block hash
     block_hash = calculate_block_hash(block)
-    #print(block)
-    #print(block_hash)
-    #print(block.get('current block hash'))
+    print(block)
+    print(block_hash)
+    print(block.get('current block hash'))
     # Check if block hash is correct
     if block_hash != block.get('current block hash'):
         #print(block_hash)

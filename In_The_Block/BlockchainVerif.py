@@ -1,12 +1,20 @@
 from BlockCreator import calculate_block_hash
 from BlockReader import read_blocks_from_file
+from TestVerifBlock import verifier_presence_objet_dans_bloc
 
 def is_valid_block(block, previous_block):
     # Calculate block hash
+    
+    resultats = verifier_presence_objet_dans_bloc(block)
+    print (resultats)
+    for transaction, est_present in resultats.items():
+        if est_present == False:
+            return False
     block_hash = calculate_block_hash(block)
-    print(block)
-    print(block_hash)
-    print(block.get('current block hash'))
+
+    #print(block)
+    #print(block_hash)
+    #print(block.get('current block hash'))
     # Check if block hash is correct
     if block_hash != block.get('current block hash'):
         #print(block_hash)

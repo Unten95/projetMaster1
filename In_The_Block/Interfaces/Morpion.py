@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
 import random
-from PIL import Image, ImageTk
 
 class Morpion(tk.Tk):
     def __init__(self):
@@ -19,16 +18,16 @@ class Morpion(tk.Tk):
         self.symbol_window = tk.Toplevel(self)
         self.symbol_window.title("Choix du symbole")
         label = tk.Label(self.symbol_window, text="Choisissez votre symbole :")
-        button_cross = tk.Button(self.symbol_window, text="Croix", command=lambda: self.start_game("cross"))
-        button_circle = tk.Button(self.symbol_window, text="Cercle", command=lambda: self.start_game("circle"))
+        button_cross = tk.Button(self.symbol_window, text="Croix", command=lambda: self.start_game("X"))
+        button_circle = tk.Button(self.symbol_window, text="Cercle", command=lambda: self.start_game("O"))
         label.pack(pady=10)
         button_cross.pack(pady=5)
         button_circle.pack(pady=5)
 
     def start_game(self, symbol):
         self.player_symbol = symbol
-        self.ai_symbol = "circle" if symbol == "cross" else "cross"
-        self.current_player = "cross"
+        self.ai_symbol = "O" if symbol == "X" else "X"
+        self.current_player = "X"
         self.symbol_window.destroy()
         self.create_board()
 
@@ -41,13 +40,13 @@ class Morpion(tk.Tk):
                 self.buttons[i][j].grid(row=i, column=j)
 
         # Si l'IA commence, elle joue le premier coup
-        if self.ai_symbol == "cross":
+        if self.ai_symbol == "X":
             self.ai_play()
 
     def on_button_click(self, row, col):
         if self.board[row][col] == '':
             self.board[row][col] = self.player_symbol
-            self.draw_symbol(row, col, self.player_symbol)
+            self.buttons[row][col].config(text=self.player_symbol)
             if self.check_winner(row, col):
                 messagebox.showinfo("Victoire", "Vous avez gagné !")
                 self.ask_play_again()
@@ -64,7 +63,7 @@ class Morpion(tk.Tk):
         if empty_cells:
             row, col = random.choice(empty_cells)
             self.board[row][col] = self.ai_symbol
-            self.draw_symbol(row, col, self.ai_symbol)
+            self.buttons[row][col].config(text=self.ai_symbol)
             if self.check_winner(row, col):
                 messagebox.showinfo("Défaite", "Vous avez perdu !")
                 self.ask_play_again()
@@ -73,16 +72,6 @@ class Morpion(tk.Tk):
                 self.ask_play_again()
             else:
                 self.current_player = self.player_symbol
-
-    def draw_symbol(self, row, col, symbol):
-        if symbol == "cross":
-            image = Image.open("Interfaces/images/green-circle.png")  # Chemin vers l'image de croix
-        else:
-            image = Image.open("Interfaces/images/red-cross.jpg")  # Chemin vers l'image de cercle
-        image = image.resize((20,20))
-        photo = ImageTk.PhotoImage(image)
-        self.buttons[row][col].config(image=photo)
-        self.buttons[row][col].image = photo
 
     def check_winner(self, row, col):
         # Vérifier la ligne
@@ -110,9 +99,9 @@ class Morpion(tk.Tk):
     def reset_board(self):
         for i in range(3):
             for j in range(3):
-                self.buttons[i][j].config(image='', text='')
+                self.buttons[i][j].config(text='')
                 self.board[i][j] = ''
-        if self.ai_symbol == "cross":
+        if self.ai_symbol == "X":
             self.ai_play()
 
     def ask_play_again(self):

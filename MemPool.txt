@@ -1,0 +1,6 @@
+Expediteur6,Destinataire6,Objet1,[Objet1|Objet2|Objet3]
+Expediteur7,Destinataire7,Objet2,[Objet1|Objet2|Objet3]
+Expediteur8,Destinataire8,Objet2,[Objet1|Objet2|Objet3]
+Expediteur9,Destinataire9,Objet3,[Objet1|Objet2|Objet3]
+Expediteur10,Destinataire10,Objet3,[Objet1|Objet2|Objet3]
+Expediteur11,Destinataire11,Objet1,[Objet1|Objet2|Objet3]

@@ -1,0 +1,22 @@
+#blockStart
+Block Number: 1;
+Transactions:;
+Expediteur6,Destinataire6,Objet1,[Objet1|Objet2|Objet3];
+Expediteur7,Destinataire7,Objet2,[Objet1|Objet2|Objet3];
+Expediteur8,Destinataire8,Objet2,[Objet1|Objet2|Objet3];
+ExpediteurNULL,idTest,Recompense,[Recompense];
+Nonce: 84959;
+Previous Block Hash: 
+Current Block Hash: 000002ab682f9c914e50be70c9b4fb62643e7ba5a42935300610c524e3a30cbe
+#blockEnd
+#blockStart
+Block Number: 2;
+Transactions:;
+Expediteur9,Destinataire9,Objet3,[Objet1|Objet2|Objet3];
+Expediteur10,Destinataire10,Objet3,[Objet1|Objet2|Objet3];
+Expediteur11,Destinataire11,Objet1,[Objet1|Objet2|Objet3];
+ExpediteurNULL,idTest,Recompense,[Recompense];
+Nonce: 468081;
+Previous Block Hash: 000002ab682f9c914e50be70c9b4fb62643e7ba5a42935300610c524e3a30cbe
+Current Block Hash: 000003c3bc112a28da48777d4e3c8ed38fe5b2dc018c4d24f12d67f99565f999
+#blockEnd

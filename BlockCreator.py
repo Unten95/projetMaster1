@@ -1,5 +1,6 @@
 import hashlib
 import os
+import random
 
 from BlockReader import read_blocks_from_file
 
@@ -13,16 +14,6 @@ def calculate_block_hash(block_data):
 
 
 def mine_block(block, difficulty):
-    """
-    Mine a block until a valid nonce is found.
-
-    Args:
-    - block: Dictionary representing the block to mine.
-    - difficulty: Integer representing the number of leading zeros required in the block hash.
-
-    Returns:
-    - The mined block with the valid nonce.
-    """
     # Initialize nonce
     nonce = 0
 
@@ -35,7 +26,7 @@ def mine_block(block, difficulty):
     # Keep mining until a valid nonce is found
     while block['current block hash'][:difficulty] != prefix:
         # Increment nonce
-        nonce += 1
+        nonce = random.randint(0, 2**32 - 1)
 
         # Update the nonce in the block
         block['nonce'] = str(nonce)
@@ -106,7 +97,7 @@ def remove_transactions_from_memory_pool(memory_pool_file, transactions):
 
 
 # Define the difficulty (number of leading zeros required)
-difficulty = 5  # Adjust this value based on your requirements
+difficulty = 4  # Adjust this value based on your requirements
 
 max_transactions = 3
 
@@ -114,7 +105,7 @@ id_mine = "idTest"
 
 # Memory pool file path
 memory_pool_file = 'MemPool.txt'
-"""
+
 # Example block data
 block_data1 = {
     'block number': 1,
@@ -130,7 +121,22 @@ block_data2 = {
     'previous block hash': ''  # Provide the hash of the previous block
 }
 
+block_data3 = {
+    'block number': 3,
+    'nonce': '789012',  # Replace with actual nonce value
+    'current block hash': '',  # Empty for now
+    'previous block hash': ''  # Provide the hash of the previous block
+}
+
+block_data4 = {
+    'block number': 4,
+    'nonce': '789012',  # Replace with actual nonce value
+    'current block hash': '',  # Empty for now
+    'previous block hash': ''  # Provide the hash of the previous block
+}
+
 # Write block data to file
 write_block_to_file(block_data1, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
 write_block_to_file(block_data2, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
-"""
+write_block_to_file(block_data3, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
+write_block_to_file(block_data4, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)

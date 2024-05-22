@@ -1,34 +1,34 @@
 from BlockCreator import calculate_block_hash
 from BlockReader import read_blocks_from_file
 
-def validate_transactions_format(transactions):
-    for transaction in transactions:
-        # Splitting transaction data
-        parts = transaction.split(',')
-        if len(parts) != 5:
-            print("Invalid transaction format:", transaction)
-            return False
 
-        sender_id, receiver_id, exchanged_item, sender_inventory_str, receiver_inventory_str = parts
+def validate_transactions_format(transaction):
+    # Splitting transaction data
+    parts = transaction.split(',')
+    if len(parts) != 5:
+        print("Invalid transaction format:", transaction)
+        return False
 
-        # Here you can add more specific checks if needed, such as verifying the sender_id
+    sender_id, receiver_id, exchanged_item, sender_inventory_str, receiver_inventory_str = parts
 
-        # Extracting sender's inventory after the transaction
-        sender_inventory = sender_inventory_str.strip('[]').split('|')
+    # Here you can add more specific checks if needed, such as verifying the sender_id
 
-        # Extracting receiver's inventory after the transaction
-        receiver_inventory = receiver_inventory_str.strip('[]').split('|')
+    # Extracting sender's inventory after the transaction
+    sender_inventory = sender_inventory_str.strip('[]').split('|')
 
-        # Check if exchanged item is present in receiver's inventory
-        if exchanged_item not in receiver_inventory:
-            print("Recipient does not have the exchanged item:", transaction)
-            return False
+    # Extracting receiver's inventory after the transaction
+    receiver_inventory = receiver_inventory_str.strip('[]').split('|')
 
-    print('Transactions are valid')
+    # Check if exchanged item is present in receiver's inventory
+    if exchanged_item not in receiver_inventory:
+        print("Recipient does not have the exchanged item:", transaction)
+        return False
+
+    #print('Transactions are valid')
     return True
 
 
-def recursive_list_traversal(blocks, Ajout_transaction):
+def verify_transactions(blocks, Ajout_transaction):
     verif_1 = False
     verif_2 = False
     blocks_reversed = blocks[::-1]
@@ -44,9 +44,18 @@ def recursive_list_traversal(blocks, Ajout_transaction):
     # Extracting receiver's inventory after the transaction
     Ajout_receiver_inventory = Ajout_receiver_inventory_str.strip('[]').split('|')
 
+    Add_trans = Ajout_transaction
+    if not (validate_transactions_format(Add_trans)):
+        print("trans suivante invalide : ", Add_trans)
+        return
+    else:
+        print("Transactions suivante valide :" , Add_trans)
     # Traitement de l'élément actuel
     for block in blocks_reversed:
         for transaction in block.get('transactions', []):
+            if not (validate_transactions_format(transaction)):
+                print("trans suivante invalide : " ,transaction)
+                return
             # Splitting transaction data
             parts = transaction.split(',')
             if len(parts) != 5:
@@ -64,24 +73,77 @@ def recursive_list_traversal(blocks, Ajout_transaction):
             receiver_inventory = receiver_inventory_str.strip('[]').split('|')
 
             if (sender_id == Ajout_sender_id):
+                # print(sender_id)
+                # print(Ajout_sender_id)
+                # print(Ajout_sender_inventory)
+                # print(sender_inventory)
                 if Ajout_exchanged_item in sender_inventory:
-                    verif_1 = True
+                    #print("test 1")
+                    sender_inventory.remove(Ajout_exchanged_item)
+                    if (len(Ajout_sender_inventory)) == len(sender_inventory):
+                        print("1 je rentre dans la comparaison Ajout sender sender")
+                        for element in sender_inventory:
+                            #print("comp : ",element)
+                            if element in Ajout_sender_inventory:
+                                #print("New inv : ", Ajout_sender_inventory)
+                                #print("Old inv : ", sender_inventory)
+                                Ajout_sender_inventory.remove(element)
+                                #print("New inv 2 : ", Ajout_sender_inventory)
+                                #print("Old inv 2 : ", sender_inventory)
+                        if len(Ajout_sender_inventory) == 0:
+                            verif_1 = True
+                            print("1 = ok")
+
             if (receiver_id == Ajout_sender_id):
+                #print("test 2")
                 if Ajout_exchanged_item in receiver_inventory:
-                    verif_1 = True
+                    receiver_inventory.remove(Ajout_exchanged_item)
+                    if len(receiver_inventory) == (len(Ajout_sender_inventory)):
+                        print("2 je rentre dans la comparaison recceiver Ajout sender")
+                        for element in receiver_inventory:
+                            if element in Ajout_sender_inventory:
+                                Ajout_sender_inventory.remove(element)
+                                #print(Ajout_sender_inventory)
+                        if len(Ajout_sender_inventory) == 0:
+                            verif_1 = True
+
             if (Ajout_receiver_id == sender_id):
-                if Ajout_exchanged_item not in sender_inventory:
-                    verif_2 = True
+                #print("test 3")
+                #print(Ajout_exchanged_item)
+                #print(sender_inventory)
+                #if Ajout_exchanged_item not in Ajout_sender_inventory:
+                if (len(Ajout_receiver_inventory) - 1) == len(sender_inventory):
+                    print("3 je rentre dans la comparaison Ajout_receiver sender")
+                    for element in Ajout_receiver_inventory:
+                        if element in sender_inventory:
+                            sender_inventory.remove(element)
+                            #print(sender_inventory)
+                    if len(sender_inventory) == 0:
+                        verif_2 = True
+
             if (Ajout_receiver_id == receiver_id):
-                if Ajout_exchanged_item not in receiver_inventory:
-                    verif_2 = True
+                #print("test 4")
+                #print(Ajout_exchanged_item)
+                #print(Ajout_receiver_inventory)
+                if Ajout_exchanged_item in Ajout_receiver_inventory:
+                    if (len(Ajout_receiver_inventory) - 1) == len(receiver_inventory):
+                        print("4 je rentre dans la comparaison Ajout receiver reciver")
+                        for element in Ajout_receiver_inventory:
+                            if element in receiver_inventory:
+                                #print("10", Ajout_receiver_inventory)
+                                #print("20", receiver_inventory)
+                                receiver_inventory.remove(element)
+                                #print(receiver_inventory)
+                        if len(receiver_inventory) == 0:
+                            verif_2 = True
+                            print("4 = ok")
 
             if verif_1 and verif_2:
                 return True
-
-                # Appel récursif pour l'élément
-
+            # print ("1",verif_1)
+            # print(verif_2)
     return False
+
 
 def is_valid_block(block, previous_block):
     """
@@ -96,12 +158,12 @@ def is_valid_block(block, previous_block):
 
     # Check if block hash is correct
     if block_hash != block.get('current block hash'):
-        print("test2")
+        #print("test2")
         return False
 
     # Check if previous block hash matches
     if previous_block is not None and block.get('previous block hash') != previous_block.get('current block hash'):
-        print("test3")
+        #print("test3")
         return False
 
     return True
@@ -111,14 +173,22 @@ def is_valid_chain(blocks):
     # Initialize previous block as None for the first block
     previous_block = None
 
+    # Initialize blockchain length
+    blockchain_length = 0
+
     # Iterate through blocks and verify each one
     for block in blocks:
+        # Verify the block
         if not is_valid_block(block, previous_block):
-            return False
+            # If any block is invalid, return -1
+            return -1
+        # Increment blockchain length
+        blockchain_length += 1
+        # Update previous block
         previous_block = block
 
-    return True
-
+    # Return the length of the blockchain
+    return blockchain_length
 
 
 """
@@ -136,6 +206,8 @@ else:
     print("Blockchain is not valid.")
 """
 
+"""
+
 # Lecture des transactions à partir du fichier MemPool.txt
 with open('MemPool.txt', 'r') as file:
     transactions = file.readlines()
@@ -149,33 +221,21 @@ if validate_transactions_format(transactions):
 else:
     print("Au moins une transaction est invalide.")
 
-
+"""
 
 def test_recursive_list_traversal():
-    # Créer une liste de blocs (simulée pour cet exemple)
-    blocks = [
-        {
-            'transactions': [
-                "Expediteur1,Destinataire1,Objet1,[Objet1|Objet2|Objet3|Objet6],[Objet4|Objet5|Objet6]",
-                "Expediteur2,Destinataire3,Objet2,[Objet1|Objet2|Objet3],[Objet4|Objet5|Objet6]",
-                "Expediteur3,Destinataire3,Objet3,[Objet1|Objet2|Objet3],[Objet4|Objet5]"
-            ]
-        },
-        {
-            'transactions': [
-                "Expediteur4,Destinataire4,Objet4,[Objet1|Objet2|Objet3],[Objet4|Objet5|Objet6]",
-                "Expediteur5,Destinataire5,Objet5,[Objet1|Objet2|Objet3],[Objet4|Objet5]"
-            ]
-        }
-    ]
 
     blocks2 = read_blocks_from_file('blockchain.txt')
 
     # Définir une transaction à ajouter (simulée pour cet exemple)
-    Ajout_transaction = "Expediteur1,Destinataire3,Objet6,[Objet1|Objet2|Objet3],[Objet4|Objet5|Objet6]"
+    #[Objet1 | Objet2 | Objet6], [Objet4 | Objet5 | Objet2 | Objet3]
+    Ajout_transaction = ("Expediteur1,Destinataire3,Objet1,[Objet2|Objet3],[Objet4|Objet5|Objet6|Objet2|Objet1]")
+    #[Objet4|Objet5|Objet6],[Objet1|Objet2|Objet3|Objet1]
+    #Ajout_transaction = "Destinataire2,Expediteur4,Objet1,[Objet4|Objet5|Objet6],[Objet1|Objet2|Objet3|Objet1]"
 
     # Appeler la fonction pour tester
-    result = recursive_list_traversal(blocks2, Ajout_transaction)
+    result = verify_transactions(blocks2, Ajout_transaction)
+
 
     # Afficher le résultat du test
     if result:
@@ -185,3 +245,8 @@ def test_recursive_list_traversal():
 
 # Appeler la fonction de test
 test_recursive_list_traversal()
+
+if is_valid_chain(blocks) == -1 :
+    print("Blockchain non valide")
+else:
+    print("longueur de la blockchain : " ,is_valid_chain(blocks))

@@ -4,7 +4,7 @@ from BlockchainVerif import *
 # Define the difficulty (number of leading zeros required)
 difficulty = 4  # Adjust this value based on your requirements
 
-max_transactions = 2
+max_transactions = 1
 
 id_mine = "idTest"
 
@@ -44,7 +44,10 @@ block_data4 = {
 # Write block data to file
 blocks = read_blocks_from_file('blockchain.txt')
 
+
 #write_block_to_file(block_data1, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
-write_block_to_file(block_data2, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
-write_block_to_file(block_data3, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
+
+
+#write_block_to_file(block_data2, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
+#write_block_to_file(block_data3, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
 write_block_to_file(block_data4, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)

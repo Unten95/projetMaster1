@@ -1,4 +1,4 @@
-from BlockCreator import calculate_block_hash
+from Calcul_hash import calculate_block_hash
 from BlockReader import read_blocks_from_file
 
 
@@ -20,7 +20,7 @@ def validate_transactions_format(transaction):
     receiver_inventory = receiver_inventory_str.strip('[]').split('|')
 
     # Check if exchanged item is present in receiver's inventory
-    if exchanged_item not in receiver_inventory:
+    if exchanged_item not in receiver_inventory_str:
         print("Recipient does not have the exchanged item:", transaction)
         return False
 
@@ -72,6 +72,7 @@ def verify_transactions(blocks, Ajout_transaction):
             # Extracting receiver's inventory after the transaction
             receiver_inventory = receiver_inventory_str.strip('[]').split('|')
 
+            #print("pppp =" ,parts)
             if (sender_id == Ajout_sender_id):
                 # print(sender_id)
                 # print(Ajout_sender_id)
@@ -119,6 +120,7 @@ def verify_transactions(blocks, Ajout_transaction):
                             sender_inventory.remove(element)
                             #print(sender_inventory)
                     if len(sender_inventory) == 0:
+                        #print("3 ok")
                         verif_2 = True
 
             if (Ajout_receiver_id == receiver_id):
@@ -155,15 +157,19 @@ def is_valid_block(block, previous_block):
 
     # Calculate block hash
     block_hash = calculate_block_hash(block)
+    #print('block hash 1 =',block_hash)
+    #print("block 1 =" ,block)
 
     # Check if block hash is correct
     if block_hash != block.get('current block hash'):
+        #print('block hash2 =',block_hash)
+        #print('block get =',block.get('current block hash'))
         #print("test2")
         return False
 
     # Check if previous block hash matches
     if previous_block is not None and block.get('previous block hash') != previous_block.get('current block hash'):
-        #print("test3")
+        print("test3")
         return False
 
     return True
@@ -178,9 +184,13 @@ def is_valid_chain(blocks):
 
     # Iterate through blocks and verify each one
     for block in blocks:
+        #print("test" ,block)
         # Verify the block
         if not is_valid_block(block, previous_block):
             # If any block is invalid, return -1
+            #print("brobleme")
+            #print(block)
+            #print(previous_block)
             return -1
         # Increment blockchain length
         blockchain_length += 1
@@ -204,9 +214,7 @@ if is_valid_chain(blocks):
     print("Blockchain is valid.")
 else:
     print("Blockchain is not valid.")
-"""
 
-"""
 
 # Lecture des transactions à partir du fichier MemPool.txt
 with open('MemPool.txt', 'r') as file:
@@ -221,8 +229,10 @@ if validate_transactions_format(transactions):
 else:
     print("Au moins une transaction est invalide.")
 
-"""
 
+
+"""
+"""
 def test_recursive_list_traversal():
 
     blocks2 = read_blocks_from_file('blockchain.txt')
@@ -245,8 +255,10 @@ def test_recursive_list_traversal():
 
 # Appeler la fonction de test
 test_recursive_list_traversal()
-
+"""
+"""
 if is_valid_chain(blocks) == -1 :
     print("Blockchain non valide")
 else:
     print("longueur de la blockchain : " ,is_valid_chain(blocks))
+"""

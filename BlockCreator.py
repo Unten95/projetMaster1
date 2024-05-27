@@ -32,7 +32,6 @@ def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max
     # Charger tous les blocs actuels pour la validation
     current_blocks = read_blocks_from_file(file_path)
 
-    """
     # Validation de toutes les transactions
     #print("test" ,transactions)
     for tx in transactions:
@@ -42,7 +41,6 @@ def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max
             print(tx)
             print("Erreur de transaction")
             return
-    """
 
     reward_transaction = f"idNULL,{id_mine},Recompense,[],[Recompense]"
     transactions.append(reward_transaction)

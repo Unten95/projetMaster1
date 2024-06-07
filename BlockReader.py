@@ -1,5 +1,3 @@
-import re
-
 def read_blocks_from_file(file_path):
     # Création d'un dictionnaire vide pour stocker les blocs
     blocks = []
@@ -19,7 +17,7 @@ def read_blocks_from_file(file_path):
 
         # Parcourir chaque ligne du fichier
         for line in lines:
-        # Si la ligne indique le début d'un nouveau bloc
+            # Si la ligne indique le début d'un nouveau bloc
             if line.strip() == '#blockStart':
                 # Ajouter le bloc actuel à la liste des blocs (à l'exception du premier bloc vide)
                 if current_block['block number'] is not None:
@@ -43,31 +41,19 @@ def read_blocks_from_file(file_path):
             elif line.startswith('Nonce:'):
                 current_block['nonce'] = line.split(': ')[1].strip(';\n')
             elif line.startswith('Previous Block Hash:'):
-                current_block['previous block hash'] = line.split(': ')[1].strip()
-                #if  (current_block['previous block hash'] ==""):
-                    #current_block['previous block hash'] = None
+                # Vérifier si la ligne est vide
+                if line.strip() == 'Previous Block Hash:':
+                    current_block['previous block hash'] = None
+                else:
+                    # Vérifier si la ligne contient le caractère ':' avant de la diviser
+                    if ':' in line:
+                        current_block['previous block hash'] = line.split(': ')[1].strip()
+                    else:
+                        print("Invalid line format for Previous Block Hash:", line)
             elif line.startswith('Current Block Hash:'):
                 current_block['current block hash'] = line.split(': ')[1].strip()
 
         # Ajouter le dernier bloc à la liste des blocs
-
-        #print(current_block)
         blocks.append(current_block)
 
-
     return blocks
-
-def display_transactions_and_hashes(blocks):
-    for block in blocks:
-        print("Block {}:".format(block.get('block number')))
-        for transaction in block.get('transactions', []):
-            print("- {}".format(transaction))
-        print("Previous Block Hash: {}".format(block.get('previous block hash', )))  # Inversion
-        print("Current Block Hash: {}".format(block.get('current block hash', )))    # Inversion
-        print("")
-
-
-
-# Example Usage:
-#blocks = read_blocks_from_file('blockchain.txt')
-#display_transactions_and_hashes(blocks)

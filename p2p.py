@@ -1,6 +1,8 @@
 import socket
 import threading
 import os
+import tempfile
+import shutil
 
 from Auth import authenticate_user
 
@@ -13,6 +15,7 @@ class Peer:
         self.connections = []
         self.adresses_file = "peer_addresses.txt"
         self.blockchain_file = "Blockchain.txt"
+        self.peer_addresses = self.read_peer_addresses()
 
     def connect(self, peer_host, peer_port):
         try:
@@ -86,10 +89,10 @@ class Peer:
     def handle_client(self, connection, address):
         peer_ip = address[0]
 
-        peer_addresses = read_peer_addresses(self.adresses_file)
-        if peer_ip not in peer_addresses:
+        if peer_ip not in self.peer_addresses:
             with open(self.adresses_file, 'a') as file:
                 file.write(peer_ip + '\n')
+            self.peer_addresses.append(peer_ip)
             print(f"A new user has joined the network: {peer_ip}")
             self.send_file(peer_ip, self.port, self.adresses_file, "addresses")  # Send peer addresses file
 
@@ -121,13 +124,25 @@ class Peer:
         connection.close()
 
     def save_addresses_file(self, file_data, peer_ip):
-        with open(self.adresses_file, 'wb') as file:
-            file.write(file_data)
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(file_data)
+            temp_file_name = temp_file.name
+        try:
+            shutil.copy(temp_file_name, self.adresses_file)
+            self.peer_addresses = self.read_peer_addresses()  # Reload addresses after saving
+        finally:
+            os.remove(temp_file_name)
         print(f"Peer addresses file received from {peer_ip} and saved as {self.adresses_file}")
 
     def save_blockchain_file(self, file_data, peer_ip):
-        with open(self.blockchain_file, 'wb') as file:
-            file.write(file_data)
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(file_data)
+            temp_file_name = temp_file.name
+        try:
+            shutil.copy(temp_file_name, self.blockchain_file)
+            # If needed, implement additional handling for new blockchain data here
+        finally:
+            os.remove(temp_file_name)
         print(f"Blockchain file received from {peer_ip} and saved as {self.blockchain_file}")
         print("Please restart the network to start chatting.")
 
@@ -142,19 +157,17 @@ class Peer:
             connected_peers.append(peer_host)
         return connected_peers
 
-
-def read_peer_addresses(file_path):
-    addresses = []
-    with open(file_path, 'r') as file:
-        for line in file:
-            address = line.strip()
-            addresses.append(address)
-    return addresses
+    def read_peer_addresses(self):
+        addresses = []
+        if os.path.exists(self.adresses_file):
+            with open(self.adresses_file, 'r') as file:
+                for line in file:
+                    address = line.strip()
+                    addresses.append(address)
+        return addresses
 
 
 def send_option(node):
-    peer_addresses = read_peer_addresses(node.adresses_file)
-
     while True:
         print("Choose an option:")
         print("1. Send a message")
@@ -177,7 +190,7 @@ def send_option(node):
                 node.send_message(destination, peer_port, message)
             elif send_method == "2":
                 content = input("Enter message: ")
-                for destination in peer_addresses:
+                for destination in node.peer_addresses:
                     peer_port = 8005
                     node.send_message(destination, peer_port, content)
             else:
@@ -199,7 +212,7 @@ def send_option(node):
             elif send_method == "2":
                 file_path = input("Enter file path: ")
                 file_type = input("Enter file type (addresses/blockchain): ")
-                for destination in peer_addresses:
+                for destination in node.peer_addresses:
                     peer_port = 8005
                     node.send_file(destination, peer_port, file_path, file_type)
             else:
@@ -207,7 +220,7 @@ def send_option(node):
 
         elif option == "3":
             if not os.path.exists(node.blockchain_file):
-                for destination in peer_addresses:
+                for destination in node.peer_addresses:
                     node.request_blockchain(destination, node.port)
                 print("Blockchain request sent to all peers.")
             else:

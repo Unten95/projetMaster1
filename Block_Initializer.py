@@ -4,7 +4,7 @@ from BlockCreator import write_block_to_file
 
 difficulty = 5  # Adjust this value based on your requirements
 
-max_transactions = 3
+max_transactions = 1
 
 id_mine = "idTest"
 

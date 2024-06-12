@@ -3,10 +3,16 @@ import threading
 import os
 import tempfile
 import shutil
-
 from Auth import authenticate_user
+from BlockReader import read_blocks_from_file
+from Transaction_Creator import creer_transaction
+from InventoryUtility import read_and_extract_first_element
+from InventoryUtility import lire_premiere_ligne
+from InventoryUtility import add_transaction
+from Transaction_Creator import get_Inventory
 
 
+SUPERADMIN=lire_premiere_ligne("peer_addresses.txt")
 class Peer:
     def __init__(self, host, port):
         self.host = host
@@ -16,6 +22,7 @@ class Peer:
         self.adresses_file = "peer_addresses.txt"
         self.blockchain_file = "Blockchain.txt"
         self.peer_addresses = self.read_peer_addresses()
+        self.inventaire = []  # Initialiser l'inventaire de l'utilisateur
 
     def connect(self, peer_host, peer_port):
         try:
@@ -115,6 +122,8 @@ class Peer:
                 self.send_file(peer_ip, self.port, self.blockchain_file, "blockchain")  # Send blockchain file
             else:
                 print(f"No blockchain file found to send to {peer_ip}")
+        elif ",[Objet" in received_data:
+            add_transaction("mempool.txt",received_data)
         else:
             received_message = received_data.decode()
             print(f"Message received from {peer_ip}: {received_message}")
@@ -166,6 +175,20 @@ class Peer:
                     addresses.append(address)
         return addresses
 
+    def create_and_send_transaction(self):
+        print(self.inventaire)
+        objet_echange = input("Entrez l'objet à envoyer: ")
+        if objet_echange not in self.inventaire:
+            print("Objet non disponible dans votre inventaire.")
+        destination = SUPERADMIN
+        peer_port = int(8005)
+
+        transaction = creer_transaction(self.host, destination, objet_echange, self.inventaire, [])
+        print(transaction)
+        add_transaction("MemPool.txt",transaction)
+        self.send_message(destination, peer_port, transaction)
+        print(f"Transaction envoyée à {destination}:{peer_port}")
+
 
 def send_option(node):
     while True:
@@ -173,6 +196,8 @@ def send_option(node):
         print("1. Send a message")
         print("2. Send a file")
         print("3. Request blockchain")
+        print("4. Create a transaction")
+        print("5. View inventory")
 
         option = input("Enter the number of your choice: ")
 
@@ -226,8 +251,27 @@ def send_option(node):
             else:
                 print("Blockchain file already exists.")
 
+        elif option == "4":
+            file_path = 'blockchain.txt'
+            blocks = read_blocks_from_file(file_path)
+            user= read_and_extract_first_element("credentials.txt")
+            actual_inventory=get_Inventory(blocks,user)
+            print("Votre inventaire actuel :",actual_inventory)
+            node.inventaire=actual_inventory
+            
+            node.create_and_send_transaction()
+
+        elif option == "5":
+            file_path = 'blockchain.txt'
+
+        # Lecture des blocs depuis le fichier
+            blocks = read_blocks_from_file(file_path)
+            user= read_and_extract_first_element("credentials.txt")
+            actual_inventory=get_Inventory(blocks,user)
+            print("Votre inventaire actuel :",actual_inventory)
+
         else:
-            print("Invalid option. Please choose '1', '2', or '3'.")
+            print("Invalid option. Please choose '1', '2', '3', '4', or '5'.")
 
 
 if __name__ == "__main__":

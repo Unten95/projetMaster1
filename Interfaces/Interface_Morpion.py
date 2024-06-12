@@ -102,7 +102,7 @@ class MorpionGUI:
         Launch_BlockchainView()
 
     def go_to_inventory(self):
-        from Interfaces.Inventory_Interface import Launch_Inventory
+        from Inventory_Interface import Launch_Inventory
         self.root.destroy()
         Launch_Inventory()
 

@@ -124,9 +124,9 @@ class Peer:
                 print(f"No blockchain file found to send to {peer_ip}")
 
         elif b"Objet" in received_data :
-            decoded_data = received_data.decode('utf-8')
-            if decoded_data.startswith(SUPERADMIN):
-                print(SUPERADMIN)
+            print(self.host)
+            if self.host == SUPERADMIN:
+                decoded_data = received_data.decode('utf-8')
                 add_transaction("mempool.txt",decoded_data)
         else:
             received_message = received_data.decode()
@@ -157,7 +157,6 @@ class Peer:
         finally:
             os.remove(temp_file_name)
         print(f"Blockchain file received from {peer_ip} and saved as {self.blockchain_file}")
-        print("Please restart the network to start chatting.")
 
     def start(self):
         listen_thread = threading.Thread(target=self.listen)
@@ -184,7 +183,7 @@ class Peer:
         objet_echange = input("Entrez l'objet à envoyer: ")
         if objet_echange not in self.inventaire:
             print("Objet non disponible dans votre inventaire.")
-        destination = SUPERADMIN
+        destination = input("Entrez le destinataire: ")
         peer_port = int(8005)
 
         transaction = creer_transaction(self.host, destination, objet_echange, self.inventaire, [])

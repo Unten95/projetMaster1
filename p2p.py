@@ -186,7 +186,7 @@ class Peer:
         destination = input("Entrez le destinataire: ")
         peer_port = int(8005)
 
-        transaction = creer_transaction(self.host, destination, objet_echange, self.inventaire, [])
+        transaction = creer_transaction(read_and_extract_first_element("credentials.txt"), destination, objet_echange, self.inventaire, [])
         print(transaction)
         self.send_message(destination, peer_port, transaction)
         print(f"Transaction envoyée à {destination}:{peer_port}")

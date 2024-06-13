@@ -122,8 +122,12 @@ class Peer:
                 self.send_file(peer_ip, self.port, self.blockchain_file, "blockchain")  # Send blockchain file
             else:
                 print(f"No blockchain file found to send to {peer_ip}")
-        elif ",[Objet" in received_data:
-            add_transaction("mempool.txt",received_data)
+
+        elif b"Objet" in received_data :
+            decoded_data = received_data.decode('utf-8')
+            if decoded_data.startswith(SUPERADMIN):
+                print(SUPERADMIN)
+                add_transaction("mempool.txt",decoded_data)
         else:
             received_message = received_data.decode()
             print(f"Message received from {peer_ip}: {received_message}")
@@ -185,7 +189,6 @@ class Peer:
 
         transaction = creer_transaction(self.host, destination, objet_echange, self.inventaire, [])
         print(transaction)
-        add_transaction("MemPool.txt",transaction)
         self.send_message(destination, peer_port, transaction)
         print(f"Transaction envoyée à {destination}:{peer_port}")
 

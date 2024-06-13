@@ -185,11 +185,16 @@ class Peer:
             print("Objet non disponible dans votre inventaire.")
         destination = input("Entrez le destinataire: ")
         peer_port = int(8005)
+        file_path = 'blockchain.txt'
 
-        transaction = creer_transaction(read_and_extract_first_element("credentials.txt"), destination, objet_echange, self.inventaire, [])
+        # Lecture des blocs depuis le fichier
+        blocks = read_blocks_from_file(file_path)
+        actual_inventory=get_Inventory(blocks,destination)
+
+        transaction = creer_transaction(read_and_extract_first_element("credentials.txt"), destination, objet_echange, self.inventaire, actual_inventory)
         print(transaction)
-        self.send_message(destination, peer_port, transaction)
-        print(f"Transaction envoyée à {destination}:{peer_port}")
+        self.send_message(SUPERADMIN, peer_port, transaction)
+        print(f"Transaction envoyée à {SUPERADMIN}:{peer_port}")
 
 
 def send_option(node):

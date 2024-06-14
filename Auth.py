@@ -14,40 +14,37 @@ def verify_credentials(username, password):
                 if username == stored_username and hash_password(password) == bytes.fromhex(stored_hashed_password):
                     return True
     except FileNotFoundError:
-        return False  # Retourne False si le fichier n'existe pas
+        return False  # Return False if the file does not exist
     return False
 
 def register_user(username, password):
     with open("credentials.txt", "a") as file:
-        # Utilisation de SHA-256 pour stocker un hachage sécurisé du mot de passe
+        # Use SHA-256 to store a secure hash of the password
         hashed_password = hash_password(password).hex()
         file.write(f"{username},{hashed_password}\n")
-    print("Utilisateur enregistré avec succès.")
+    print("User registered successfully.")
 
-def main():
+def authenticate_user():
     identification = True
     while identification:
-        choice = input("1. S'identifier\n2. S'enregistrer\n3. Quitter\nChoix : ")
+        choice = input("1. Log in\n2. Register\n3. Quit\nChoice: ")
 
         if choice == "1":
-            username = input("Nom d'utilisateur : ")
-            password = input("Mot de passe : ")
+            username = input("Username: ")
+            password = input("Password: ")
             if verify_credentials(username, password):
-                print("Connexion réussie.")
-                identification = False
+                print("Login successful.")
+                return True  # User is authenticated
             else:
-                print("Nom d'utilisateur ou mot de passe incorrect.")
+                print("Incorrect username or password.")
         elif choice == "2":
-            username = input("Nom d'utilisateur : ")
-            password = input("Mot de passe : ")
+            username = input("Username: ")
+            password = input("Password: ")
             if not verify_credentials(username, password):
                 register_user(username, password)
             else:
-                print("Cet utilisateur existe déjà.")
+                print("This user already exists.")
         elif choice == "3":
-            break
+            return False  # Exit the program
         else:
-            print("Choix invalide. Veuillez entrer 1, 2 ou 3.")
-
-if __name__ == "__main__":
-    main()
+            print("Invalid choice. Please enter 1, 2, or 3.")

@@ -1,5 +1,5 @@
 from BlockReader import read_blocks_from_file
-from BlockchainVerif import recursive_list_traversal, validate_transactions_format
+from BlockchainVerif import is_valid_block, validate_transactions_format
 """
 --------------------------------------------
 Partie test
@@ -53,7 +53,7 @@ def test_recursive_list_traversal():
     #Ajout_transaction = "Expediteur1,Destinataire12,Objet1,[Objet2|Objet3],[Objet1|Objet4|Objet5|Objet6|Objet11]"
     Ajout_transaction = "Destinataire12,Expediteur1,Objet4,[Objet5|Objet6|Objet11],[Objet4|Objet1|Objet2|Objet3]"
     # Appeler la fonction pour tester
-    result = recursive_list_traversal(blocks2, Ajout_transaction)
+    result = is_valid_block(blocks2, Ajout_transaction)
 
     # Afficher le résultat du test
     if result==True:

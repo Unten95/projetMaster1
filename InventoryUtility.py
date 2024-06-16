@@ -1,4 +1,5 @@
 import os
+import re
 
 def list_files_in_directory(directory):
     """
@@ -66,6 +67,47 @@ def add_transaction(nom_fichier, nouvelle_ligne):
     
     except Exception as e:
         print(f"Une erreur s'est produite : {e}")
+
+
+def read_first_three_lines(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        premiere_ligne = file.readline()  # Lire la première ligne et retirer les espaces
+    return premiere_ligne
+
+
+def write_lines_to_file(lines_string, output_file_path):
+    lines = lines_string.split('\n')
+    if lines_string.strip():  # Vérifie si le string n'est pas vide
+        with open(output_file_path, 'a', encoding='utf-8') as file:
+            for line in lines:
+                file.write(line + '\n')
+
+
+def extract_ip_address(message):
+    ip_address = message.split(',')[0]
+    return ip_address
+
+def get_last_block_number(file_path):
+    with open(file_path, 'r') as file:
+        content = file.read()
+
+    # Regex pattern to find block numbers
+    block_pattern = re.compile(r'Block Number: (\d+);')
+    blocks = block_pattern.findall(content)
+
+    if not blocks:
+        print("No blocks found.")
+        return None
+
+    last_block_number = int(blocks[-1])
+    return last_block_number+1
+
+
+
+# Exemple d'utilisation
+#message = "191.168.151.1,Mine"
+#ip_address = extract_ip_address(message)
+#print(ip_address)  # Devrait afficher: 191.168.151.1
 
 
 # Exemple d'utilisation :

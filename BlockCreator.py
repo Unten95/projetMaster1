@@ -87,7 +87,7 @@ def remove_transactions_from_memory_pool(memory_pool_file, transactions):
                 if line.strip() not in transactions:
                     file.write(line)
 
-
+"""
 # Define the difficulty (number of leading zeros required)
 difficulty = 4  # Adjust this value based on your requirements
 
@@ -133,3 +133,4 @@ write_block_to_file(block_data1, 'blockchain.txt', difficulty, memory_pool_file,
 write_block_to_file(block_data2, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
 write_block_to_file(block_data3, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
 write_block_to_file(block_data4, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
+"""

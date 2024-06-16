@@ -155,12 +155,7 @@ class Peer:
                 message=read_first_three_lines("Mempool.txt")
                 decoded_data = received_data.decode('utf-8')
                 ip_miner=extract_ip_address(decoded_data)
-                print(ip_miner)#remmetre partout hostname au lieu de ton adresse 
-                print(message)
                 self.send_message(ip_miner, 8005, "start"+message)
-
-
-                    
                 
         else:
             received_message = received_data.decode()

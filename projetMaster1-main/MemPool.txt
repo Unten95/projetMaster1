@@ -1,1 +1,0 @@
-id7,id8,Objet3,[Objet1|Objet2|Objet7],[Objet4|Objet5|Objet6|Objet8|Objet3]

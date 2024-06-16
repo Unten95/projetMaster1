@@ -27,7 +27,7 @@ def process_file(filename):
             in_block = True
         elif line.startswith('#blockStart'):
             in_block = False
-        elif in_block and line.startswith('Expediteur') and not line.startswith('ExpediteurNULL'):
+        elif in_block and line.startswith('id') and not line.startswith('ExpediteurNULL'):
             expediteur, destinataire, objet, objets_list1, objets_list2 = parse_transaction(line)
             key = (expediteur, destinataire)
             if key not in seen_expedit_dest:
@@ -110,6 +110,6 @@ class Application(tk.Tk):
         self.geometry(f'{width}x{height}+{x}+{y}')
 
 def Launch_Market():
-    app = Application("Blockchain.txt")
+    app = Application("../Blockchain.txt")
     app.mainloop()
 

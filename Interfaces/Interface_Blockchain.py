@@ -7,8 +7,8 @@ class FenetreAffichage(tk.Tk):
         self.title("Affichage de la Blockchain et du Mempool")
         self.iconbitmap(default='info')  # Utilisation d'une icône par défaut de tkinter
 
-        self.fichier1 = "Blockchain.txt"
-        self.fichier2 = "Mempool.txt"
+        self.fichier1 = "../Blockchain.txt"
+        self.fichier2 = "../Mempool.txt"
 
         self.frame_fichier1 = tk.Frame(self)
         self.frame_fichier1.pack(side=tk.LEFT, fill="both", expand=True)

@@ -3,14 +3,13 @@ import threading
 import os
 import tempfile
 import shutil
-from Auth import authenticate_user
+from Interfaces.Auth import authenticate_user
 from BlockCreator import write_block_to_file
 from BlockReader import read_blocks_from_file
 from Block_Initializer import InitializeBlock_data
 from Transaction_Creator import creer_transaction
 from Interfaces.InventoryUtility import extract_ip_address, get_last_block_number, read_and_extract_first_element, read_first_three_lines, write_lines_to_file
 from Interfaces.InventoryUtility import lire_premiere_ligne
-from Interfaces.InventoryUtility import add_transaction
 from Transaction_Creator import get_Inventory
 
 
@@ -123,7 +122,6 @@ class Peer:
             self.save_addresses_file(received_data[len(b"ADDR:"):], peer_ip)
         elif received_data.startswith(b"BCT:"):
             self.save_blockchain_file_temp(received_data[len(b"BCT:"):], peer_ip)
-
         elif received_data.startswith(b"BC:"):
             self.save_blockchain_file(received_data[len(b"BC:"):], peer_ip)
         elif received_data == b"REQUEST_BLOCKCHAIN":
@@ -153,13 +151,13 @@ class Peer:
             hostname = socket.gethostname()
             local_ip = socket.gethostbyname(hostname)
             print(local_ip)
-            if local_ip==SUPERADMIN:
+            if local_ip == SUPERADMIN:
                 message=read_first_three_lines("Mempool.txt")
                 decoded_data = received_data.decode('utf-8')
                 ip_miner=extract_ip_address(decoded_data)
                 print(ip_miner)#remmetre partout hostname au lieu de ton adresse 
                 print(message)
-                self.send_message(ip_miner,8005,"start"+message)
+                self.send_message(ip_miner, 8005, "start"+message)
 
 
                     

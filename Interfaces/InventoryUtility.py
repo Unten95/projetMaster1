@@ -1,6 +1,13 @@
 import os
 import re
 
+
+def read_and_extract_all_elements(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+    return [line.strip() for line in lines]
+
+
 def list_files_in_directory(directory):
     """
     Recherche tous les fichiers dans un dossier donné et retourne une liste des chemins de ces fichiers.
@@ -31,6 +38,7 @@ def read_and_extract_first_element(file_path):
         first_element = content.split(',')[0]  # Split the content by comma and take the first part
     return first_element
 
+
 def lire_premiere_ligne(nom_fichier):
     try:
         with open(nom_fichier, 'r') as fichier:
@@ -40,7 +48,8 @@ def lire_premiere_ligne(nom_fichier):
         return "Le fichier n'existe pas."
     except Exception as e:
         return f"Une erreur est survenue: {e}"
-    
+
+
 def add_transaction(nom_fichier, nouvelle_ligne):
     """
     Ajoute une ligne à la fin du fichier si elle n'est pas déjà présente.
@@ -51,28 +60,28 @@ def add_transaction(nom_fichier, nouvelle_ligne):
     try:
         with open(nom_fichier, 'r', encoding='utf-8') as fichier:
             lignes_existantes = fichier.read().splitlines()
-        
+
         if nouvelle_ligne in lignes_existantes:
             print("La ligne est déjà présente dans le fichier.")
         else:
             with open(nom_fichier, 'a', encoding='utf-8') as fichier:
                 fichier.write(nouvelle_ligne)
             print("Ligne ajoutée avec succès.")
-    
+
     except FileNotFoundError:
         # Si le fichier n'existe pas, on le crée et on ajoute la nouvelle ligne
         with open(nom_fichier, 'w', encoding='utf-8') as fichier:
             fichier.write(nouvelle_ligne)
         print("Fichier créé et ligne ajoutée avec succès.")
-    
+
     except Exception as e:
         print(f"Une erreur s'est produite : {e}")
 
 
 def read_first_three_lines(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
-        premiere_ligne = file.readline()  # Lire la première ligne et retirer les espaces
-    return premiere_ligne
+        lines = [next(file).strip() for _ in range(3) if file]
+    return '\n'.join(lines)
 
 
 def write_lines_to_file(lines_string, output_file_path):
@@ -87,6 +96,7 @@ def extract_ip_address(message):
     ip_address = message.split(',')[0]
     return ip_address
 
+
 def get_last_block_number(file_path):
     with open(file_path, 'r') as file:
         content = file.read()
@@ -100,32 +110,37 @@ def get_last_block_number(file_path):
         return None
 
     last_block_number = int(blocks[-1])
-    return last_block_number+1
+    return last_block_number + 1
 
 
+"""
+file_path = 'Blockchain.txt'
+last_block_number = get_last_block_number(file_path)
+print(last_block_number)
+"""
 
 # Exemple d'utilisation
-#message = "191.168.151.1,Mine"
-#ip_address = extract_ip_address(message)
-#print(ip_address)  # Devrait afficher: 191.168.151.1
+# message = "191.168.151.1,Mine"
+# ip_address = extract_ip_address(message)
+# print(ip_address)  # Devrait afficher: 191.168.151.1
 
 
 # Exemple d'utilisation :
-#add_transaction('mon_fichier.txt', 'Ceci est un nouveau texte.')
+# add_transaction('mon_fichier.txt', 'Ceci est un nouveau texte.')
 
 
 # Exemple d'utilisation
-#nom_fichier = 'votre_fichier.txt'
-#premiere_ligne = lire_premiere_ligne(nom_fichier)
-#print(premiere_ligne)
+# nom_fichier = 'votre_fichier.txt'
+# premiere_ligne = lire_premiere_ligne(nom_fichier)
+# print(premiere_ligne)
 
-#Exemple d'utilisation
-#file_path = 'credentials.txt'  # Remplacez par le chemin réel de votre fichier
-#first_element = read_and_extract_first_element(file_path)
-#print(f"Le premier élément est : {first_element}")  # Output: "Le premier élément est : Unten95"
+# Exemple d'utilisation
+# file_path = 'credentials.txt'  # Remplacez par le chemin réel de votre fichier
+# first_element = read_and_extract_first_element(file_path)
+# print(f"Le premier élément est : {first_element}")  # Output: "Le premier élément est : Unten95"
 
 
 # Exemple d'utilisation :
-#directory_path = "chemin/vers/votre/dossier"
-#file_paths = list_files_in_directory(directory_path)
-#print("Liste des fichiers dans le dossier :", file_paths)
+# directory_path = "chemin/vers/votre/dossier"
+# file_paths = list_files_in_directory(directory_path)
+# print("Liste des fichiers dans le dossier :", file_paths)

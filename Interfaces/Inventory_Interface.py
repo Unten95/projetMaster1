@@ -1,11 +1,14 @@
 import tkinter as tk
+import sys
 from PIL import Image, ImageTk
 from tkinter import ttk
-
+from BlockReader import read_blocks_from_file
 from Interface_Blockchain import Launch_BlockchainView
 from Interface_Market import Launch_Market
 from Interface_Morpion import LaunchMorpion
 from InventoryUtility import list_files_in_directory
+from Transaction_Creator import get_Inventory
+from InventoryUtility import read_and_extract_first_element
 
 class InventoryGUI:
     def __init__(self, root, inventory):
@@ -17,8 +20,6 @@ class InventoryGUI:
         for item in self.inventory:
             self.item_listbox.insert(tk.END, item)  # Insérer les noms des images
         self.item_listbox.grid(row=0, column=0, padx=10, pady=10)
-        self.item_listbox.bind('<<ListboxSelect>>', self.display_selected_image)  # Lier un gestionnaire d'événements à la sélection de la liste
-
         # Ajouter une barre de défilement à la liste
         self.scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL)
         self.scrollbar.config(command=self.item_listbox.yview)
@@ -45,16 +46,6 @@ class InventoryGUI:
         self.button_init_transaction = tk.Button(self.button_frame, text="Initialiser une transaction", command=self.go_to_shop)
         self.button_init_transaction.pack(side=tk.LEFT, padx=5)
 
-    def display_selected_image(self, event):
-        selected_index = self.item_listbox.curselection()  # Obtenir l'index de l'élément sélectionné
-        if selected_index:
-            selected_image_path = self.inventory[selected_index[0]]  # Récupérer le chemin de l'image sélectionnée
-            image = Image.open("Interfaces\\inventaire\\" + selected_image_path)
-            image = image.resize((100, 100))  # Redimensionner l'image pour l'aperçu
-            photo = ImageTk.PhotoImage(image)
-            self.display_image_label.config(image=photo)
-            self.display_image_label.image = photo
-
     def go_to_shop(self):
         self.root.destroy()
         Launch_Market()
@@ -68,11 +59,14 @@ class InventoryGUI:
         Launch_BlockchainView()
 
 def Launch_Inventory():
+    from PrincipalMenu import current_user
     root = tk.Tk()
     root.title("Inventaire")
 
     # Liste d'exemple d'images (chemins vers les fichiers)
-    inventory = list_files_in_directory("Interfaces\\inventaire")
+    file_path = '../Blockchain.txt'
+    blocks = read_blocks_from_file(file_path)
+    inventory = get_Inventory(blocks,current_user)
 
     # Centrer la fenêtre
     window_width = 500
@@ -87,7 +81,3 @@ def Launch_Inventory():
     inventory_gui = InventoryGUI(root, inventory)
 
     root.mainloop()
-
-# Pour lancer l'application
-if __name__ == "__main__":
-    Launch_Inventory()

@@ -8,7 +8,7 @@ def hash_password(password):
 
 def verify_credentials(username, password):
     try:
-        with open("../credentials.txt", "r") as file:
+        with open("credentials.txt", "r") as file:
             for line in file:
                 stored_username, stored_hashed_password = line.strip().split(",")
                 if username == stored_username and hash_password(password) == bytes.fromhex(stored_hashed_password):
@@ -18,7 +18,7 @@ def verify_credentials(username, password):
     return False
 
 def register_user(username, password):
-    with open("../credentials.txt", "a") as file:
+    with open("credentials.txt", "a") as file:
         # Use SHA-256 to store a secure hash of the password
         hashed_password = hash_password(password).hex()
         file.write(f"{username},{hashed_password}\n")

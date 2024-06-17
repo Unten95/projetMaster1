@@ -80,8 +80,8 @@ def add_transaction(nom_fichier, nouvelle_ligne):
 
 def read_first_three_lines(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
-        lines = [next(file).strip() for _ in range(3) if file]
-    return '\n'.join(lines)
+        premiere_ligne = file.readline()  # Lire la première ligne et retirer les espaces
+    return premiere_ligne
 
 
 def write_lines_to_file(lines_string, output_file_path):
@@ -90,6 +90,7 @@ def write_lines_to_file(lines_string, output_file_path):
         with open(output_file_path, 'a', encoding='utf-8') as file:
             for line in lines:
                 file.write(line + '\n')
+
 
 
 def extract_ip_address(message):

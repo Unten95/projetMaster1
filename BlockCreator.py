@@ -35,13 +35,13 @@ def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max
 
     # Validation de toutes les transactions
     #print("test" ,transactions)
-    """for tx in transactions:
+    for tx in transactions:
         if verify_transactions(current_blocks, tx):
             print("Transactions valides")
         else:
             print(tx)
             print("Erreur de transaction")
-            return"""
+            return
 
 
 

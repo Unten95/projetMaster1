@@ -135,7 +135,7 @@ class Peer:
                 local_ip = socket.gethostbyname(hostname)
                 decoded_data = received_data.decode('utf-8')
                 ip_miner=extract_ip_address(decoded_data)
-                decoded_data=decoded_data.split("start")[0]
+                decoded_data=decoded_data.split("start")[1]
                 write_lines_to_file(decoded_data,"Mempool.txt")
                 block=InitializeBlock_data()
                 write_block_to_file(block, "Blockchain.txt", 4, "Mempool.txt", 1,IDUSER)
@@ -154,8 +154,8 @@ class Peer:
             if local_ip == SUPERADMIN:
                 message=read_first_three_lines("Mempool.txt")
                 decoded_data = received_data.decode('utf-8')
-                ip_miner=extract_ip_address(decoded_data)
-                self.send_message(ip_miner, 8005, "start"+message)
+                #ip_miner=extract_ip_address(decoded_data)
+                self.send_message(peer_ip, 8005, "start"+message)
                 
         else:
             received_message = received_data.decode()

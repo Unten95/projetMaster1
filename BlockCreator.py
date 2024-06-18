@@ -4,6 +4,7 @@ import random
 from BlockReader import read_blocks_from_file
 from BlockchainVerif import verify_transactions
 from Calcul_hash import calculate_block_hash
+from Interfaces.InventoryUtility import enlever_transaction
 
 
 def mine_block(block, difficulty):
@@ -26,11 +27,12 @@ def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max
         block_data['previous block hash'] = previous_block_hash
     else:
         print("This is the first block. Using empty hash for previous block.")
-        block_data['previous block hash'] = ''
+        block_data['previous block hash'] = '0'
 
     transactions = read_memory_pool(memory_pool_file, max_transactions)
     # Charger tous les blocs actuels pour la validation
     current_blocks = read_blocks_from_file(file_path)
+
 
     # Validation de toutes les transactions
     #print("test" ,transactions)
@@ -40,7 +42,10 @@ def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max
         else:
             print(tx)
             print("Erreur de transaction")
+            enlever_transaction("../Mempool.txt", tx)
             return
+
+
 
     reward_transaction = f"idNULL,{id_mine},Recompense,[],[Recompense]"
     transactions.append(reward_transaction)
@@ -62,7 +67,7 @@ def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max
         file.write(f"Current Block Hash: {mined_block['current block hash']}\n")
         file.write("#blockEnd\n")
 
-    remove_transactions_from_memory_pool(memory_pool_file, mined_block['transactions'])
+    remove_transactions_from_memory_pool("Mempool.txt", mined_block['transactions'])
 
 
 
@@ -83,3 +88,51 @@ def remove_transactions_from_memory_pool(memory_pool_file, transactions):
             for line in lines:
                 if line.strip() not in transactions:
                     file.write(line)
+
+"""
+# Define the difficulty (number of leading zeros required)
+difficulty = 4  # Adjust this value based on your requirements
+
+max_transactions = 1
+
+id_mine = "idTest"
+
+# Memory pool file path
+memory_pool_file = 'MemPool.txt'
+
+
+# Example block data
+block_data1 = {
+    'block number': 1,
+    'nonce': '123456',  # Replace with actual nonce value
+    'current block hash': '',  # Empty for now
+    'previous block hash': ''  # Empty for the first block
+}
+
+block_data2 = {
+    'block number': 2,
+    'nonce': '789012',  # Replace with actual nonce value
+    'current block hash': '',  # Empty for now
+    'previous block hash': ''  # Provide the hash of the previous block
+}
+
+block_data3 = {
+    'block number': 3,
+    'nonce': '789012',  # Replace with actual nonce value
+    'current block hash': '',  # Empty for now
+    'previous block hash': ''  # Provide the hash of the previous block
+}
+
+block_data4 = {
+    'block number': 4,
+    'nonce': '789012',  # Replace with actual nonce value
+    'current block hash': '',  # Empty for now
+    'previous block hash': ''  # Provide the hash of the previous block
+}
+
+# Write block data to file
+write_block_to_file(block_data1, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
+write_block_to_file(block_data2, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
+write_block_to_file(block_data3, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
+write_block_to_file(block_data4, 'blockchain.txt', difficulty, memory_pool_file, max_transactions, id_mine)
+"""

@@ -1,17 +1,15 @@
 import tkinter as tk
 from tkinter import scrolledtext
 
-
-
-
-class FenetreAffichage(tk.Tk):
-    def __init__(self):
+class FenetreAffichage(tk.Tk,):
+    def __init__(self,inventory_window):
         super().__init__()
+        self.inventory_window = inventory_window  # Store the inventory window reference
         self.title("Affichage de la Blockchain et du Mempool")
         self.iconbitmap(default='info')  # Utilisation d'une icône par défaut de tkinter
 
-        self.fichier1 = "Blockchain.txt"
-        self.fichier2 = "Mempool.txt"
+        self.fichier1 = "../Blockchain.txt"
+        self.fichier2 = "../Mempool.txt"
 
         self.frame_fichier1 = tk.Frame(self)
         self.frame_fichier1.pack(side=tk.LEFT, fill="both", expand=True)
@@ -27,15 +25,27 @@ class FenetreAffichage(tk.Tk):
 
         self.afficher_contenu()
 
-        self.bouton_actualiser = tk.Button(self, text="Inventaire", command=self.go_to_inventory)
-        self.bouton_actualiser.pack(side=tk.LEFT)
+        self.bouton_inventory = tk.Button(self, text="Inventaire", command=self.go_to_inventory)
+        self.bouton_inventory.pack(side=tk.LEFT)
 
-        self.bouton_actualiser = tk.Button(self, text="Jouer", command=self.play_game)
-        self.bouton_actualiser.pack(side=tk.LEFT)
+        self.bouton_play = tk.Button(self, text="Jouer", command=self.play_game)
+        self.bouton_play.pack(side=tk.LEFT)
 
         # Bouton pour actualiser l'affichage des fichiers
         self.bouton_actualiser = tk.Button(self, text="Actualiser", command=self.afficher_contenu)
         self.bouton_actualiser.pack(side=tk.LEFT)
+
+        self.center_window()
+
+    def center_window(self):
+        self.update_idletasks()
+        window_width = self.winfo_width()
+        window_height = self.winfo_height()
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x_coordinate = int((screen_width / 2) - (window_width / 2))
+        y_coordinate = int((screen_height / 2) - (window_height / 2))
+        self.geometry(f"{window_width}x{window_height}+{x_coordinate}+{y_coordinate}")
 
     def afficher_contenu(self):
         self.texte_fichier1.delete('1.0', tk.END)
@@ -72,22 +82,15 @@ class FenetreAffichage(tk.Tk):
             self.texte_fichier2.insert(tk.END, "Fichier non trouvé.")
             self.texte_fichier2.configure(state="disabled")
 
-
     def go_to_inventory(self):
-        from Inventory_Interface import Launch_Inventory
         self.destroy()
-        Launch_Inventory()
+        self.inventory_window.deiconify()
 
     def play_game(self):
         from Interface_Morpion import LaunchMorpion
         self.destroy()
-        LaunchMorpion()
+        LaunchMorpion(self.inventory_window)
 
-
-
-def Launch_BlockchainView():
-    fenetre_affichage = FenetreAffichage()
-    fenetre_affichage.mainloop()
-
-# Maintenant, vous pouvez appeler cette fonction depuis n'importe quelle partie de votre code pour lancer la fenêtre FenetreAffichage.
-
+def Launch_BlockchainView(inventory_window):
+    root=FenetreAffichage(inventory_window)
+    root.mainloop()

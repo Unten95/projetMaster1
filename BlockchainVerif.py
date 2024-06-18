@@ -208,7 +208,7 @@ Partie test
 
 
 # Example Usage:
-blocks = read_blocks_from_file('blockchain.txt')
+#blocks = read_blocks_from_file('blockchain.txt')
 """
 if is_valid_chain(blocks):
     print("Blockchain is valid.")

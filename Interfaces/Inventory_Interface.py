@@ -47,15 +47,15 @@ class InventoryGUI:
         self.button_init_transaction.pack(side=tk.LEFT, padx=5)
 
     def go_to_shop(self):
-        self.root.destroy()
+        self.root.withdraw()  # Cacher la fenêtre actuelle
         Launch_Market()
 
     def play_game(self):
-        self.root.destroy()
+        self.root.withdraw()  # Cacher la fenêtre actuelle
         LaunchMorpion()
 
     def open_blockchain(self):
-        self.root.destroy()
+        self.root.withdraw()  # Cacher la fenêtre actuelle
         Launch_BlockchainView()
 
 def Launch_Inventory():
@@ -66,7 +66,7 @@ def Launch_Inventory():
     # Liste d'exemple d'images (chemins vers les fichiers)
     file_path = '../Blockchain.txt'
     blocks = read_blocks_from_file(file_path)
-    inventory = get_Inventory(blocks,current_user)
+    inventory = get_Inventory(blocks, current_user)
 
     # Centrer la fenêtre
     window_width = 500
@@ -81,3 +81,4 @@ def Launch_Inventory():
     inventory_gui = InventoryGUI(root, inventory)
 
     root.mainloop()
+

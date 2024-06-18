@@ -84,14 +84,9 @@ def read_first_three_lines(file_path):
     return premiere_ligne
 
 
-def write_lines_to_file(lines_string, output_file_path):
-    lines = lines_string.split('\n')
-    if lines_string.strip():  # Vérifie si le string n'est pas vide
-        with open(output_file_path, 'a', encoding='utf-8') as file:
-            for line in lines:
-                file.write(line + '\n')
-
-
+def write_lines_to_file(line, output_file_path):
+        with open(output_file_path, 'w', encoding='utf-8') as file:
+                file.write(line)
 
 def extract_ip_address(message):
     ip_address = message.split(',')[0]
@@ -112,6 +107,10 @@ def get_last_block_number(file_path):
 
     last_block_number = int(blocks[-1])
     return last_block_number + 1
+
+def vider_fichier(chemin_fichier):
+    with open(chemin_fichier, 'w') as fichier:
+        pass  # L'utilisation du mode 'w' et de pass permet de vider le fichier sans y ajouter de contenu
 
 
 """

@@ -8,7 +8,7 @@ from BlockCreator import write_block_to_file
 from BlockReader import read_blocks_from_file
 from Block_Initializer import InitializeBlock_data
 from Transaction_Creator import creer_transaction
-from Interfaces.InventoryUtility import extract_ip_address, get_last_block_number, read_and_extract_first_element, read_first_three_lines, write_lines_to_file
+from Interfaces.InventoryUtility import extract_ip_address, get_last_block_number, read_and_extract_first_element, read_first_three_lines, write_lines_to_file,vider_fichier
 from Interfaces.InventoryUtility import lire_premiere_ligne
 from Transaction_Creator import get_Inventory
 
@@ -131,14 +131,13 @@ class Peer:
                 print(f"No blockchain file found to send to {peer_ip}")
 
         elif b"start"in received_data:
-                hostname = socket.gethostname()
-                local_ip = socket.gethostbyname(hostname)
                 decoded_data = received_data.decode('utf-8')
-                ip_miner=extract_ip_address(decoded_data)
                 decoded_data=decoded_data.split("start")[1]
+                print(decoded_data)
                 write_lines_to_file(decoded_data,"Mempool.txt")
                 block=InitializeBlock_data()
                 write_block_to_file(block, "Blockchain.txt", 4, "Mempool.txt", 1,IDUSER)
+                vider_fichier("Mempool.txt")
                 self.send_file(peer_ip, self.port, self.blockchain_file, "blockchain")
                 
 

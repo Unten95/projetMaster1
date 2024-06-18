@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 
+from Interfaces.Interface_Blockchain import Launch_BlockchainView
+from Interfaces.Interface_Morpion import LaunchMorpion
+
 # Exemple de données d'items
 items = [
     {'name': 'Item 1', 'description': 'Description for item 1', 'price': '10.00'},
@@ -85,20 +88,20 @@ class MarketApp:
             selected_item = items[selected_index[0]]
             self.description_label.config(text=f"Description: {selected_item['description']}")
 
-    def open_blockchain(self):
-        from Interface_Blockchain import Launch_BlockchainView
-        self.root.destroy()
-        Launch_BlockchainView()
+    def go_to_shop(self):
+        self.root.withdraw()
+        Launch_Market(self)
 
-    def go_to_inventory(self):
-        from Inventory_Interface import Launch_Inventory
-        self.root.destroy()
-        Launch_Inventory()
-        
     def play_game(self):
-        from Interface_Morpion import LaunchMorpion
-        self.root.destroy()
-        LaunchMorpion()
+        self.root.withdraw()
+        LaunchMorpion(self)
+
+    def open_blockchain(self):
+        self.root.withdraw()
+        Launch_BlockchainView(self)
+
+    def show_main_window(self):
+        self.root.deiconify()
 
         
 

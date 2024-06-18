@@ -1,2 +1,1 @@
-id7,id8,Objet1,[Objet2|Objet3|Objet7],[Objet4|Objet5|Objet6|Objet8|Objet1]
-id7,id8,0bjet2,[Objet1|Objet2|Objet3|Objet7],[Objet4|Objet5|Objet6|Objet8|0bjet2]
+id8,id7,Objet4,[Objet5|Objet6|Objet8],[Objet4|Objet1|Objet2|Objet3|Objet7];

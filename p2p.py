@@ -20,7 +20,7 @@ class Peer:
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connections = []
-        self.adresses_file = "peer_addresses.txt"
+        self.adresses_file = "../peer_addresses.txt"
         self.blockchain_file = "../Blockchain.txt"
         self.peer_addresses = self.read_peer_addresses()
         self.inventaire = []  # Initialiser l'inventaire de l'utilisateur

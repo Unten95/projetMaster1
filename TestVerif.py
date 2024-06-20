@@ -1,5 +1,6 @@
 from BlockReader import read_blocks_from_file
-from BlockchainVerif import is_valid_block, validate_transactions_format
+from BlockchainVerif import is_valid_block, validate_transactions_format, is_valid_chain
+
 """
 --------------------------------------------
 Partie test
@@ -7,13 +8,13 @@ Partie test
 
 
 # Example Usage:
-blocks = read_blocks_from_file('blockchain.txt')
-"""
-if is_valid_chain(blocks):
-    print("Blockchain is valid.")
-else:
-    print("Blockchain is not valid.")
-"""
+#blocks = read_blocks_from_file('blockchain.txt')
+
+#if is_valid_chain(blocks):
+    #print("Blockchain is valid.")
+#else:
+    #print("Blockchain is not valid.")
+
 
 # Lecture des transactions à partir du fichier MemPool.txt
 with open('MemPool.txt', 'r') as file:

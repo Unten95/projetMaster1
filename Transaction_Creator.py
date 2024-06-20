@@ -17,6 +17,7 @@ def get_Inventory(blocks, user_id):
             if sender_id == user_id:
                 return sender_inventory_str.strip('[]').split('|')
             if receiver_id == user_id:
+                #print(receiver_inventory_str.strip('[]').split('|'))
                 return receiver_inventory_str.strip('[]').split('|')
 
     return None

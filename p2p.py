@@ -7,13 +7,16 @@ from BlockCreator import write_block_to_file
 from BlockReader import read_blocks_from_file
 from Block_Initializer import InitializeBlock_data
 from Transaction_Creator import creer_transaction
-from Interfaces.InventoryUtility import extract_ip_address, get_last_block_number, read_and_extract_first_element, read_first_three_lines, write_lines_to_file,supprimer_lignes_vides
+from Interfaces.InventoryUtility import extract_ip_address, get_last_block_number, read_and_extract_first_element, \
+    read_first_three_lines, write_lines_to_file, supprimer_lignes_vides, lire_premiere_ligne, \
+    get_second_to_last_transaction_from_file, enlever_transaction
 from Transaction_Creator import get_Inventory
 
+SUPERADMIN = lire_premiere_ligne("..\peer_addresses.txt")
+PEER_PORT = 8005
+IDUSER = read_and_extract_first_element("..\credentials.txt")
 
-SUPERADMIN="192.168.1.161"#lire_premiere_ligne("peer_addresses.txt")
-PEER_PORT=8005
-IDUSER=read_and_extract_first_element("..\credentials.txt")
+
 class Peer:
     def __init__(self, host, port):
         self.host = host
@@ -69,15 +72,16 @@ class Peer:
             elif file_type == "blockchain":
                 prefix = b"BC:"
             elif file_type == "blockchaintemp":
-                prefix = b"BCT:"
+                prefix = b"TB:"
 
             data_to_send = prefix + file_data
 
             if peer_host == "broadcast":
-                for connection in self.connections:
-                    connection.sendall(data_to_send)
+                for destination in self.peer_addresses:
+                    self.send_file(destination, peer_port, file_path, file_type)
                 print("File broadcasted successfully.")
             else:
+                print("test2")
                 connection = socket.create_connection((peer_host, peer_port))
                 connection.sendall(data_to_send)
                 print(f"File sent to {peer_host}:{peer_port}")
@@ -118,43 +122,46 @@ class Peer:
 
         if received_data.startswith(b"ADDR:"):
             self.save_addresses_file(received_data[len(b"ADDR:"):], peer_ip)
-        elif received_data.startswith(b"BCT:"):
-            self.save_blockchain_file_temp(received_data[len(b"BCT:"):], peer_ip)
+        elif received_data.startswith(b"TB:"):
+            self.save_blockchain_file_temp(received_data[len(b"TB:"):], peer_ip)
         elif received_data.startswith(b"BC:"):
             self.save_blockchain_file(received_data[len(b"BC:"):], peer_ip)
         elif received_data == b"REQUEST_BLOCKCHAIN":
             if os.path.exists(self.blockchain_file):
-                self.send_file(peer_ip, self.port, self.blockchain_file, "blockchain")  # Send blockchain file
+
+                self.send_file("broadcast", self.port, self.blockchain_file, "blockchain")  # Send blockchain file
             else:
                 print(f"No blockchain file found to send to {peer_ip}")
 
-        elif b"start"in received_data:
-                decoded_data = received_data.decode('utf-8')
-                print(decoded_data)
-                decoded_data=decoded_data.split("start")[1]
-                print(decoded_data)
-                write_lines_to_file(decoded_data,"../Mempool.txt")
-                supprimer_lignes_vides("../Mempool.txt")
-                block=InitializeBlock_data()
-                write_block_to_file(block, "../Blockchain.txt", 4, "../Mempool.txt", 1,IDUSER)
-                self.send_file(peer_ip, self.port, self.blockchain_file, "blockchain")
-                
-
-
-        elif b"Objet" in received_data :
+        elif b"start" in received_data:
             decoded_data = received_data.decode('utf-8')
-            write_lines_to_file(decoded_data,"../Mempool.txt")
+            print(decoded_data)
+            decoded_data = decoded_data.split("start")[1]
+            print(decoded_data)
+            write_lines_to_file(decoded_data, "../Mempool.txt")
+            supprimer_lignes_vides("../Mempool.txt")
+            block = InitializeBlock_data()
+            write_block_to_file(block, "../Blockchain.txt", 4, "../Mempool.txt", 1, IDUSER)
+            self.send_file("broadcast", self.port, self.blockchain_file, "blockchaintemp")
 
-        elif b"Mine"in received_data:
+
+
+        elif b"Objet" in received_data:
+            decoded_data = received_data.decode('utf-8')
+            write_lines_to_file(decoded_data, "../Mempool.txt")
+            supprimer_lignes_vides("../Mempool.txt")
+
+        elif b"Mine" in received_data:
             hostname = socket.gethostname()
             local_ip = socket.gethostbyname(hostname)
             print(local_ip)
             if local_ip == SUPERADMIN:
-                message=read_first_three_lines("../Mempool.txt")
+                supprimer_lignes_vides("../Mempool.txt")
+                message = read_first_three_lines("../Mempool.txt")
                 decoded_data = received_data.decode('utf-8')
-                ip_miner=extract_ip_address(decoded_data)
-                self.send_message(ip_miner, 8005, "start"+message)
-                
+                ip_miner = extract_ip_address(decoded_data)
+                self.send_message(ip_miner, 8005, "start" + message)
+
         else:
             received_message = received_data.decode()
             print(f"Message received from {peer_ip}: {received_message}")
@@ -189,13 +196,23 @@ class Peer:
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
             temp_file.write(file_data)
             temp_file_name = temp_file.name
+
         try:
-            if get_last_block_number("blockchain_temp.txt") > get_last_block_number("blockchain.txt"):
-                shutil.copy(temp_file_name, "blockhain_temp.txt")
-            # If needed, implement additional handling for new blockchain data here
+            temp_block_number = get_last_block_number(temp_file_name)
+            main_block_number = get_last_block_number("../blockchain.txt")
+
+            if temp_block_number > main_block_number:
+                shutil.copy(temp_file_name, "../blockchain.txt")
+                print(f"Blockchain file received from {peer_ip} and saved as blockchain_temp.txt")
+            else:
+                print(f"Received blockchain file from {peer_ip} is not newer than the current blockchain.")
+            transaction = get_second_to_last_transaction_from_file("../blockchain.txt")
+            enlever_transaction("../Mempool.txt", transaction)
+            print(f"Blockchain file received from {peer_ip} and saved as blockchain_temp.txt")
+        except Exception as e:
+            print(f"An error occurred: {e}")
         finally:
             os.remove(temp_file_name)
-        print(f"Blockchain file received from {peer_ip} and saved as blockhain_temp.txt")
 
     def start(self):
         listen_thread = threading.Thread(target=self.listen)
@@ -217,7 +234,7 @@ class Peer:
                     addresses.append(address)
         return addresses
 
-    def create_and_send_transaction(self,idn,objet):
+    def create_and_send_transaction(self, idn, objet):
         objet_echange = objet
         print(objet_echange)
         destination = idn
@@ -228,11 +245,12 @@ class Peer:
 
         # Lecture des blocs depuis le fichier
         blocks = read_blocks_from_file(file_path)
-        actual_inventory=get_Inventory(blocks,destination)
+        actual_inventory = get_Inventory(blocks, destination)
         print(actual_inventory)
-        my_inventory = get_Inventory(blocks,read_and_extract_first_element("../credentials.txt"))
+        my_inventory = get_Inventory(blocks, read_and_extract_first_element("../credentials.txt"))
         print(my_inventory)
-        transaction = creer_transaction(read_and_extract_first_element("../credentials.txt"), destination, objet_echange, my_inventory, actual_inventory)
+        transaction = creer_transaction(read_and_extract_first_element("../credentials.txt"), destination,
+                                        objet_echange, my_inventory, actual_inventory)
         print(transaction)
         self.send_message(SUPERADMIN, peer_port, transaction)
         print(f"Transaction envoyée à {SUPERADMIN}:{peer_port}")

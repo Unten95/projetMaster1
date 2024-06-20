@@ -4,7 +4,9 @@ import random
 from BlockReader import read_blocks_from_file
 from BlockchainVerif import verify_transactions
 from Calcul_hash import calculate_block_hash
+from Create_transaction import blocks
 from Interfaces.InventoryUtility import enlever_transaction
+from Transaction_Creator import get_Inventory
 
 
 def mine_block(block, difficulty):
@@ -33,7 +35,7 @@ def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max
     # Charger tous les blocs actuels pour la validation
     current_blocks = read_blocks_from_file(file_path)
 
-
+    print(current_blocks)
     # Validation de toutes les transactions
     #print("test" ,transactions)
     for tx in transactions:
@@ -45,13 +47,60 @@ def write_block_to_file(block_data, file_path, difficulty, memory_pool_file, max
             enlever_transaction("../Mempool.txt", tx)
             return
 
+    tx = transactions[0]
+    print(tx)
+    parts = tx.split(',')
+    Ajout_sender_id, Ajout_receiver_id, Ajout_exchanged_item, Ajout_sender_inventory_str, Ajout_receiver_inventory_str = parts
+
+    if Ajout_sender_id == id_mine :
+        print("test 1")
+        possible_rewards = ["Objet1", "Objet2", "Objet3", "Objet4", "Objet5", "Objet6", "Objet7", "Objet8",
+                            "Objet9", "Objet10"]
+        reward = random.choice(possible_rewards)
+        # reward_transaction = f"idNULL,{id_mine},{reward},[],[{id_mine}|{reward}]"
+        inventory = Ajout_sender_inventory_str.strip('[]').split('|')
+
+        if inventory is None:
+            inventory = []
+
+        inventory_str = '|'.join(inventory + [reward])
+        reward_transaction = f"idNULL,{id_mine},{reward},[],[{inventory_str}]"
+        transactions.append(reward_transaction)
+
+    elif Ajout_receiver_id == id_mine :
+        print("test 2")
+        possible_rewards = ["Objet1", "Objet2", "Objet3", "Objet4", "Objet5", "Objet6", "Objet7", "Objet8",
+                            "Objet9", "Objet10"]
+        reward = random.choice(possible_rewards)
+        # reward_transaction = f"idNULL,{id_mine},{reward},[],[{id_mine}|{reward}]"
+        inventory = Ajout_receiver_inventory_str.strip('[]').split('|')
+
+        if inventory is None:
+            inventory = []
+
+        inventory_str = '|'.join(inventory + [reward])
+        reward_transaction = f"idNULL,{id_mine},{reward},[],[{inventory_str}]"
+        transactions.append(reward_transaction)
+
+    else:
+        possible_rewards = ["Objet1", "Objet2", "Objet3", "Objet4", "Objet5", "Objet6", "Objet7", "Objet8",
+                            "Objet9", "Objet10"]
+        reward = random.choice(possible_rewards)
+        # reward_transaction = f"idNULL,{id_mine},{reward},[],[{id_mine}|{reward}]"
+        inventory = get_Inventory(blocks, id_mine)
+
+        if inventory is None:
+            inventory = []
+
+        inventory_str = '|'.join(inventory + [reward])
+        reward_transaction = f"idNULL,{id_mine},{reward},[],[{inventory_str}]"
+        transactions.append(reward_transaction)
 
 
-    reward_transaction = f"idNULL,{id_mine},Recompense,[],[Recompense]"
-    transactions.append(reward_transaction)
+    print(transactions)
 
     block_data['transactions'] = transactions
-
+    print(block_data['block number'])
 
 
     mined_block = mine_block(block_data, difficulty)

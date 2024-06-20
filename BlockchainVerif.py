@@ -56,6 +56,11 @@ def verify_transactions(blocks, Ajout_transaction):
             if not (validate_transactions_format(transaction)):
                 print("trans suivante invalide : " ,transaction)
                 return
+            #print("test 1," ,transaction)
+            #print("test 2," , Add_trans)
+            if transaction == Add_trans:
+                print("trans suivante invalide : ", transaction)
+                return
             # Splitting transaction data
             parts = transaction.split(',')
             if len(parts) != 5:

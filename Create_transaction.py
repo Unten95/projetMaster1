@@ -44,7 +44,7 @@ def creer_transaction(id_source, id_dest, objet_echange, inventaire_source, inve
 
 
 # Chemin du fichier blockchain
-file_path = 'blockchain.txt'
+file_path = '../Blockchain.txt'
 
 # Lecture des blocs depuis le fichier
 blocks = read_blocks_from_file(file_path)
@@ -57,6 +57,7 @@ user_id_dest = 'id8'
 inventory_source = get_Inventory(blocks, user_id_source)
 inventory_dest = get_Inventory(blocks, user_id_dest)
 
+"""
 print(inventory_source)
 print(inventory_dest)
 
@@ -69,3 +70,4 @@ transaction = creer_transaction(user_id_source, user_id_dest, item_to_exchange, 
 # Affichage de la transaction créée
 print("Transaction créée:")
 print(transaction)
+"""

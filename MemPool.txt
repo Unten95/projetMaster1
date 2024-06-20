@@ -1,0 +1,2 @@
+id1,id7,Objet4,[Objet10],[Objet1|Objet2|Objet3|Objet4|Objet5|Objet6|Objet4]
+id1,id7,Objet4,[Objet10],[Objet1|Objet2|Objet3|Objet4|Objet5|Objet6|Objet4]

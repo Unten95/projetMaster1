@@ -1,6 +1,37 @@
 import os
 import re
 
+def get_second_to_last_transaction_from_file(file_path):
+    try:
+        # Read the content of the file
+        with open(file_path, 'r') as file:
+            blockchain_data = file.read()
+
+        blocks = blockchain_data.split("#blockEnd")
+        # Remove the last empty block (split by '#blockEnd')
+        if blocks[-1].strip() == "":
+            blocks.pop()
+
+        # Get the last block and its transactions
+        last_block = blocks[-1]
+        transaction_start_idx = last_block.find("Transactions:;")
+
+        if transaction_start_idx != -1:
+            transactions_part = last_block[transaction_start_idx + len("Transactions:;"):].strip()
+            transactions = transactions_part.split('\n')
+
+            # Get the second-to-last transaction if it exists
+            if len(transactions) > 1:
+                second_to_last_transaction = transactions[-2]
+                return second_to_last_transaction
+
+        return None
+    except FileNotFoundError:
+        print(f"The file '{file_path}' does not exist.")
+        return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 def read_and_extract_all_elements(file_path):
     with open(file_path, 'r') as file:
@@ -106,6 +137,7 @@ def supprimer_lignes_vides(nom_fichier):
 
 
 def enlever_transaction(filename,string_to_remove):
+    print("string to remove")
     with open(filename, 'r') as file:
          lines = file.readlines()
 
@@ -144,6 +176,26 @@ def get_last_block_number(file_path):
 
     last_block_number = int(blocks[-1])
     return last_block_number + 1
+
+
+def remove_first_occurrence_from_file(file_path, text_to_remove):
+    try:
+        # Read the content of the file
+        with open(file_path, 'r') as file:
+            content = file.read()
+
+        # Remove the first occurrence of the specified text
+        modified_content = content.replace(text_to_remove, '', 1)
+
+        # Write the modified content back to the file
+        with open(file_path, 'w') as file:
+            file.write(modified_content)
+
+        print(f"The first occurrence of '{text_to_remove}' has been removed from the file.")
+    except FileNotFoundError:
+        print(f"The file '{file_path}' does not exist.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 """

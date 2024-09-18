@@ -1,3 +1,6 @@
+import os
+CREDENTIALS_FILE = os.path.join(os.path.dirname(__file__), 'Blockchain.txt')
+
 def read_blocks_from_file(file_path):
     # Création d'un dictionnaire vide pour stocker les blocs
     blocks = []

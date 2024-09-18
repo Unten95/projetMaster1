@@ -1,22 +1,54 @@
 #blockStart
 Block Number: 1;
 Transactions:;
-Expediteur6,Destinataire6,Objet1,[Objet1|Objet2|Objet3];
-Expediteur7,Destinataire7,Objet2,[Objet1|Objet2|Objet3];
-Expediteur8,Destinataire8,Objet2,[Objet1|Objet2|Objet3];
-ExpediteurNULL,idTest,Recompense,[Recompense];
-Nonce: 84959;
-Previous Block Hash: 
-Current Block Hash: 000002ab682f9c914e50be70c9b4fb62643e7ba5a42935300610c524e3a30cbe
+id7,id8,Objet7,[Objet1|Objet2|Objet3],[Objet4|Objet5|Objet6|Objet7|Objet8];
+idNULL,idTest,Recompense,[],[Recompense];
+Nonce: 3846598159;
+Previous Block Hash: 0
+Current Block Hash: 000042c6a5e2eaef86cac93923b33b2b60040cf3375645508758a7759791baa1
 #blockEnd
 #blockStart
 Block Number: 2;
 Transactions:;
-Expediteur9,Destinataire9,Objet3,[Objet1|Objet2|Objet3];
-Expediteur10,Destinataire10,Objet3,[Objet1|Objet2|Objet3];
-Expediteur11,Destinataire11,Objet1,[Objet1|Objet2|Objet3];
-ExpediteurNULL,idTest,Recompense,[Recompense];
-Nonce: 468081;
-Previous Block Hash: 000002ab682f9c914e50be70c9b4fb62643e7ba5a42935300610c524e3a30cbe
-Current Block Hash: 000003c3bc112a28da48777d4e3c8ed38fe5b2dc018c4d24f12d67f99565f999
+id8,id9,Objet8,[Objet4|Objet5|Objet6|Objet7],[Objet4|Objet5|Objet6|Objet8];
+idNULL,idTest,Recompense,[],[Recompense];
+Nonce: 565866196;
+Previous Block Hash: 000042c6a5e2eaef86cac93923b33b2b60040cf3375645508758a7759791baa1
+Current Block Hash: 000028c9c496e6c80edd0399dcf4f006bc1b023366d2c81d25bf7e75fd08a2a1
+#blockEnd
+#blockStart
+Block Number: 3;
+Transactions:;
+id9,id8,Objet8,[Objet4|Objet5|Objet6],[Objet4|Objet5|Objet6|Objet7|Objet8];
+idNULL,idTest,Recompense,[],[Recompense];
+Nonce: 2457763342;
+Previous Block Hash: 000028c9c496e6c80edd0399dcf4f006bc1b023366d2c81d25bf7e75fd08a2a1
+Current Block Hash: 00004468287ae736da5d6109963a853e15a75b93b2ff6b65b729f290fc3fc9bc
+#blockEnd
+#blockStart
+Block Number: 4;
+Transactions:;
+id9,id7,Objet6,[Objet4|Objet5],[Objet1|Objet2|Objet3|Objet6];
+idNULL,id8,Objet9,[],[Objet4|Objet5|Objet6|Objet7|Objet8|Objet9];
+Nonce: 3934591652;
+Previous Block Hash: 00004468287ae736da5d6109963a853e15a75b93b2ff6b65b729f290fc3fc9bc
+Current Block Hash: 0000c4fe0146a23fd954da2804ae96568d1863387afa6b6612abdd5f073a64fd
+#blockEnd
+#blockStart
+Block Number: 5;
+Transactions:;
+id8,id9,Objet9,[Objet4|Objet5|Objet6|Objet7|Objet8],[Objet4|Objet5|Objet9];
+idNULL,id7,Objet6,[],[Objet1|Objet2|Objet3|Objet6|Objet6];
+Nonce: 261634025;
+Previous Block Hash: 0000c4fe0146a23fd954da2804ae96568d1863387afa6b6612abdd5f073a64fd
+Current Block Hash: 00004f7fc15895258168aea4bd731d324f378986882838aac19708ccebc46ccc
+#blockEnd
+#blockStart
+Block Number: 6;
+Transactions:;
+id7,id9,Objet6,[Objet1|Objet2|Objet3|Objet6],[Objet4|Objet5|Objet9|Objet6];
+idNULL,id8,Objet6,[],[Objet4|Objet5|Objet6|Objet7|Objet8|Objet9|Objet6];
+Nonce: 2334326789;
+Previous Block Hash: 00004f7fc15895258168aea4bd731d324f378986882838aac19708ccebc46ccc
+Current Block Hash: 00000a5bc01249274cce9ca3f00be426947d4899f44b0f7d29ecb20617e04418
 #blockEnd

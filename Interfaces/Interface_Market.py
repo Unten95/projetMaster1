@@ -115,5 +115,5 @@ class Application(tk.Tk):
 
 
 def Launch_Market(inventory_window):
-    app = Application("../Blockchain.txt", inventory_window)
+    app = Application("Blockchain.txt", inventory_window)
     app.mainloop()

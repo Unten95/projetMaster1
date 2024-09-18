@@ -1,5 +1,36 @@
 import os
 import re
+def get_last_transaction_from_file(file_path):
+    try:
+        # Read the content of the file
+        with open(file_path, 'r') as file:
+            blockchain_data = file.read()
+
+        blocks = blockchain_data.split("#blockEnd")
+        # Remove the last empty block (split by '#blockEnd')
+        if blocks[-1].strip() == "":
+            blocks.pop()
+
+        # Get the last block and its transactions
+        last_block = blocks[-1]
+        transaction_start_idx = last_block.find("Transactions:;")
+
+        if transaction_start_idx != -1:
+            transactions_part = last_block[transaction_start_idx + len("Transactions:;"):].strip()
+            transactions = transactions_part.split('\n')
+
+            # Get the last transaction if it exists
+            if transactions:
+                last_transaction = transactions[-1]
+                return last_transaction
+
+        return None
+    except FileNotFoundError:
+        print(f"The file '{file_path}' does not exist.")
+        return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
 
 def get_second_to_last_transaction_from_file(file_path):
     try:

@@ -3,7 +3,7 @@ from Interfaces.InventoryUtility import get_last_block_number
 
 def InitializeBlock_data():
 
-    block_data_number= get_last_block_number("../blockchain.txt")
+    block_data_number= get_last_block_number("blockchain.txt")
 
     # Example block data
     block_data= {

@@ -8,7 +8,7 @@ from cryptography.hazmat.backends import default_backend
 from Inventory_Interface import Launch_Inventory
 
 # Chemin vers le fichier des identifiants
-CREDENTIALS_FILE = os.path.join(os.path.dirname(__file__), '../credentials.txt')
+CREDENTIALS_FILE = os.path.join(os.path.dirname(__file__), 'credentials.txt')
 
 # Variable globale pour stocker l'identifiant de l'utilisateur connecté
 current_user = None
@@ -98,7 +98,7 @@ def Auth_Interface():
     root = tk.Tk()
     root.title("Connexion")
 
-    image = Image.open("images/logo.png")  # Chemin vers votre image
+    image = Image.open("interfaces\images\logo.png")  # Chemin vers votre image
     image = image.resize((100, 100))
     image = ImageTk.PhotoImage(image)
     label_image = tk.Label(root, image=image)

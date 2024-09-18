@@ -44,7 +44,7 @@ def creer_transaction(id_source, id_dest, objet_echange, inventaire_source, inve
 
 
 # Chemin du fichier blockchain
-file_path = '../Blockchain.txt'
+file_path = 'Blockchain.txt'
 
 # Lecture des blocs depuis le fichier
 blocks = read_blocks_from_file(file_path)

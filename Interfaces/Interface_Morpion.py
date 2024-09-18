@@ -8,7 +8,7 @@ from Transaction_Creator import get_Inventory  # Assurez-vous d'importer correct
 
 # Chargement des couleurs depuis le fichier
 def load_colors():
-    with open('colors.txt', 'r') as file:
+    with open('interfaces\colors.txt', 'r') as file:
         lines = file.readlines()
         colors = [line.strip().split('=')[1].strip().strip('"') for line in lines]
         x_colors = colors[:5]
@@ -132,7 +132,7 @@ class MorpionGUI:
     def choose_object(self):
         from PrincipalMenu import current_user
         # Récupérer l'inventaire de l'utilisateur
-        file_path = '../Blockchain.txt'
+        file_path = 'Blockchain.txt'
         blocks = read_blocks_from_file(file_path)
         inventory = get_Inventory(blocks, current_user)
 

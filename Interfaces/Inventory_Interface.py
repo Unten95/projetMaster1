@@ -12,6 +12,7 @@ import threading
 
 class InventoryGUI:
     def __init__(self, root, inventory):
+
         self.node1 = Peer("0.0.0.0", 8005)
         self.thread = threading.Thread(target=self.node1.start)
         self.thread.start()
@@ -54,6 +55,9 @@ class InventoryGUI:
         self.button_init_blockchain = tk.Button(self.button_frame, text="Miner", command=self.mine_block)
         self.button_init_blockchain.pack(side=tk.LEFT, padx=5)
 
+        self.button_init_blockchain = tk.Button(self.button_frame, text="request", command=self.node1.request)
+        self.button_init_blockchain.pack(side=tk.LEFT, padx=5)
+
         # Button to refresh inventory
         self.button_refresh = tk.Button(self.button_frame, text="Actualiser l'inventaire",
                                         command=self.update_inventory)
@@ -70,7 +74,7 @@ class InventoryGUI:
     def update_inventory(self):
         # Update self.inventory with the latest data
         from PrincipalMenu import current_user  # Re-import to ensure updated data
-        file_path = '../Blockchain.txt'
+        file_path = 'Blockchain.txt'
         blocks = read_blocks_from_file(file_path)
         self.inventory = get_Inventory(blocks, current_user)
         # Update the listbox with new inventory
@@ -122,12 +126,12 @@ def Launch_Inventory():
     root.title("Inventaire")
 
     # Example list of images (file paths)
-    file_path = '../Blockchain.txt'
+    file_path = 'Blockchain.txt'
     blocks = read_blocks_from_file(file_path)
     inventory = get_Inventory(blocks, current_user)
 
     # Center the window
-    window_width = 600
+    window_width = 900
     window_height = 400
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()

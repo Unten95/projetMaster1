@@ -17,6 +17,7 @@ def get_Inventory(blocks, user_id):
             if sender_id == user_id:
                 return sender_inventory_str.strip('[]').split('|')
             if receiver_id == user_id:
+                #print(receiver_inventory_str.strip('[]').split('|'))
                 return receiver_inventory_str.strip('[]').split('|')
 
     return None
@@ -41,33 +42,3 @@ def creer_transaction(id_source, id_dest, objet_echange, inventaire_source, inve
     transaction = f"{id_source},{id_dest},{objet_echange},{inventaire_source_str},{inventaire_dest_str}"
 
     return transaction
-
-
-# Chemin du fichier blockchain
-file_path = '../Blockchain.txt'
-
-# Lecture des blocs depuis le fichier
-blocks = read_blocks_from_file(file_path)
-
-# Identifiants des utilisateurs et inventaires correspondants
-user_id_source = 'id7'
-user_id_dest = 'id8'
-
-# Récupération des inventaires des utilisateurs depuis la blockchain
-inventory_source = get_Inventory(blocks, user_id_source)
-inventory_dest = get_Inventory(blocks, user_id_dest)
-
-"""
-print(inventory_source)
-print(inventory_dest)
-
-# Objet à échanger
-item_to_exchange = 'Objet7'
-
-# Création de la transaction
-transaction = creer_transaction(user_id_source, user_id_dest, item_to_exchange, inventory_source, inventory_dest)
-
-# Affichage de la transaction créée
-print("Transaction créée:")
-print(transaction)
-"""

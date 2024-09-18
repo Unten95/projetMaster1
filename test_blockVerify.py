@@ -52,7 +52,7 @@ def test_recursive_list_traversal():
 test_recursive_list_traversal()
 """
 
-if is_valid_chain(blocks) == -1 :
-    print("Blockchain non valide")
-else:
-    print("longueur de la blockchain : " ,is_valid_chain(blocks))
+#if is_valid_chain(blocks) == -1 :
+   # print("Blockchain non valide")
+#else:
+   # print("longueur de la blockchain : " ,is_valid_chain(blocks))

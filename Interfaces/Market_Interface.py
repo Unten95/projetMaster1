@@ -13,8 +13,9 @@ items = [
 ]
 
 class MarketApp:
-    def __init__(self, root):
+    def __init__(self, root,inventory_window):
         self.root = root
+        self.inventory_window = inventory_window
         self.root.title("Items List")
 
         # Centrer la fenêtre sur l'écran
@@ -88,26 +89,19 @@ class MarketApp:
     def open_blockchain(self):
         from Interface_Blockchain import Launch_BlockchainView
         self.root.destroy()
-        Launch_BlockchainView()
+        Launch_BlockchainView(self.inventory_window)
 
     def go_to_inventory(self):
-        from Inventory_Interface import Launch_Inventory
         self.root.destroy()
-        Launch_Inventory()
+        self.inventory_window.deiconify()
         
     def play_game(self):
         from Interface_Morpion import LaunchMorpion
         self.root.destroy()
-        LaunchMorpion()
+        LaunchMorpion(self.inventory_window)
 
-        
-
-
-    
-        
-
-def Launch_Market():
+def Launch_Market(inventory_window):
     root = tk.Tk()
-    app = MarketApp(root)
+    app = MarketApp(root,inventory_window)
     root.mainloop()
 
